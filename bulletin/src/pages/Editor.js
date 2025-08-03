@@ -1,11 +1,8 @@
 import {useState} from 'react';
 import blueprint from '../../public/blueprint.json';
 import Draggable, {DraggableCore} from 'react-draggable';
-import logo from '../../public/vercel.svg';
 import Popup from 'reactjs-popup';
-
-
-
+import Image from 'next/image';
 
 export default function EditorBoard(){
 
@@ -15,6 +12,15 @@ export default function EditorBoard(){
   function handle() {
     AddText(value);
   }
+
+  const handleStop = (event, dragElement) => {
+    var xpos = dragElement.x;
+    var ypos = dragElement.y;
+    console.log(xpos, ypos);
+    items.xpos = xpos;
+    items.ypos = ypos;
+    console.log(items.xpos, items.ypos);
+  };
 
   return(
     <div id="board">
@@ -39,17 +45,16 @@ export default function EditorBoard(){
 
 function CreateElements(items){
   //Create each custom element from the json blueprint and store in a list.
-  const elements = items.map(items => {
+  const elements = items.map((item) => {
     const tempElements = [];
-      if(items.type == "text"){
+    if(item.type == "text"){
         tempElements.push(
-          MakeText(items)
+          MakeText(item)
       )}
-      if(items.type == "img"){
+      if(item.type == "img"){
         tempElements.push(
-          MakeImg(items)
+          MakeImg(item)
       )}
-    console.log("returning elements")
     return tempElements;
   })
   //Wrap in another div, as react can only return 1 element per function.
@@ -57,8 +62,9 @@ function CreateElements(items){
     <div id="loadContainer">
       {elements}
     </div>
-  )
+  );
 }
+
 
 function MakeText(items){   //Handles creating a new element with text 
   //These must be draggable in the board editor. This tracks their location so it can be saved
@@ -72,22 +78,22 @@ function MakeText(items){   //Handles creating a new element with text
   };
   return(
   <Draggable
-          grid={[25, 25]}
-          scale={1}
-          onStop={handleStop}>
-          <div key={items.id}>
-            <p id={items.id} style={{
-              color: items.color, fontFamily: items.font, fontSize: items.textSize,
-              position: 'absolute', top: items.ypos, left: items.xpos
-              }}>
-                {items.text}</p>
-          </div>
-          </Draggable>
+    grid={[25, 25]}
+    scale={1}
+    onStop={handleStop}>
+    <div key={items.id}>
+      <p id={items.id} style={{
+        color: items.color, fontFamily: items.font, fontSize: items.textSize,
+        position: 'absolute', top: items.ypos, left: items.xpos
+        }}>
+          {items.text}</p>
+    </div>
+  </Draggable>
   )}
 
 function MakeImg(items){    //Handles creating a new element with text 
 //Location Tracking when the div is dragged
-  const tracker = (event, dragElement) => {
+  const handleStop = (event, dragElement) => {
     var xpos = dragElement.x;
     var ypos = dragElement.y;
     console.log(xpos, ypos);
@@ -99,9 +105,9 @@ function MakeImg(items){    //Handles creating a new element with text
   <Draggable
     grid={[25, 25]}
     scale={1}
-    onStop={tracker}>
+    onStop={handleStop}>
     <div key={items.id}>
-      <img id={items.id} src={logo} alt={items.text} width={items.size} height={items.size}
+      <img id={items.id} src={"next.svg"} alt={items.text} width={items.size} height={items.size}
       style={{position:'absolute', top: items.ypos, left: items.xpos}}
       ></img>
     </div>

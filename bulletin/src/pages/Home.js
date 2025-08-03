@@ -15,7 +15,6 @@ function CreateElements(items){
     const tempElements = [];
 
       if(items.type == "text"){
-      
         tempElements.push(
           <div key={items.id}>
             <p style={{
