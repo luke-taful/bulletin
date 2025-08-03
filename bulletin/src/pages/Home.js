@@ -1,5 +1,5 @@
 import blueprint from '../../public/blueprint.json';
-import logo from '../../public/vercel.svg';
+import Image from 'next/image';
 
 
 export default function Board(){
@@ -28,12 +28,12 @@ function CreateElements(items){
       if(items.type == "img"){
         tempElements.push(
           <div key={items.id}>
-            <img src={logo} alt={items.text} width={items.size} height={items.size}
+            <img src={"/next.svg"} alt={items.text} width={items.size} height={items.size}
             style={{position:'absolute', top: items.ypos, left: items.xpos}}
             ></img>
           </div>
       )}
-    
+
     return tempElements;
   })
   return(
