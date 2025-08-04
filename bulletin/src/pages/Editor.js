@@ -1,4 +1,4 @@
-import {useState} from 'react';
+import React, {forwardRef, useState} from 'react';
 import blueprint from '../../public/blueprint.json';
 import Draggable, {DraggableCore} from 'react-draggable';
 import Popup from 'reactjs-popup';
@@ -12,15 +12,6 @@ export default function EditorBoard(){
   function handle() {
     AddText(value);
   }
-
-  const handleStop = (event, dragElement) => {
-    var xpos = dragElement.x;
-    var ypos = dragElement.y;
-    console.log(xpos, ypos);
-    items.xpos = xpos;
-    items.ypos = ypos;
-    console.log(items.xpos, items.ypos);
-  };
 
   return(
     <div id="board">
@@ -38,7 +29,6 @@ export default function EditorBoard(){
           {/* popup to add new image */}
           <button onClick={AddImage}>Add Image</button>
       </div>
-      
     </div>
   );
 }
@@ -80,13 +70,12 @@ function MakeText(items){   //Handles creating a new element with text
   <Draggable
     grid={[25, 25]}
     scale={1}
-    onStop={handleStop}>
+    onStop={handleStop}
+    defaultPosition={{ x: items.xpos, y: items.ypos }}>
     <div key={items.id}>
-      <p id={items.id} style={{
-        color: items.color, fontFamily: items.font, fontSize: items.textSize,
-        position: 'absolute', top: items.ypos, left: items.xpos
-        }}>
-          {items.text}</p>
+      <p id={items.id} style={{color: items.color, fontFamily: items.font, fontSize: items.textSize}}>
+        {items.text}
+      </p>
     </div>
   </Draggable>
   )}
@@ -105,14 +94,16 @@ function MakeImg(items){    //Handles creating a new element with text
   <Draggable
     grid={[25, 25]}
     scale={1}
-    onStop={handleStop}>
+    onStop={handleStop}
+    defaultPosition={{ x: items.xpos, y: items.ypos }}>
     <div key={items.id}>
       <img id={items.id} src={"next.svg"} alt={items.text} width={items.size} height={items.size}
-      style={{position:'absolute', top: items.ypos, left: items.xpos}}
       ></img>
     </div>
   </Draggable>
 )}
+
+
 
 function AddText(textIn){
     blueprint.push({
@@ -127,7 +118,6 @@ function AddText(textIn){
     });
     console.log(blueprint);
 }
-
 
 function AddImage(){
      //Open local file explorer

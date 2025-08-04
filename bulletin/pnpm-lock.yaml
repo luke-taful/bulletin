@@ -10,19 +10,19 @@ importers:
     dependencies:
       next:
         specifier: 15.4.5
-        version: 15.4.5(react-dom@19.1.0(react@19.1.0))(react@19.1.0)
+        version: 15.4.5(react-dom@18.2.0(react@18.2.0))(react@18.2.0)
       react:
-        specifier: 19.1.0
-        version: 19.1.0
+        specifier: 18.2.0
+        version: 18.2.0
       react-dom:
-        specifier: 19.1.0
-        version: 19.1.0(react@19.1.0)
+        specifier: 18.2.0
+        version: 18.2.0(react@18.2.0)
       react-draggable:
         specifier: ^4.5.0
-        version: 4.5.0(react-dom@19.1.0(react@19.1.0))(react@19.1.0)
+        version: 4.5.0(react-dom@18.2.0(react@18.2.0))(react@18.2.0)
       reactjs-popup:
         specifier: ^2.0.6
-        version: 2.0.6(react-dom@19.1.0(react@19.1.0))(react@19.1.0)
+        version: 2.0.6(react-dom@18.2.0(react@18.2.0))(react@18.2.0)
 
 packages:
 
@@ -283,10 +283,10 @@ packages:
   prop-types@15.8.1:
     resolution: {integrity: sha512-oj87CgZICdulUohogVAR7AjlC0327U4el4L6eAvOqCeudMDVU0NThNaV+b9Df4dXgSP1gXMTnPdhfe/2qDH5cg==}
 
-  react-dom@19.1.0:
-    resolution: {integrity: sha512-Xs1hdnE+DyKgeHJeJznQmYMIBG3TKIHJJT95Q58nHLSrElKlGQqDTR2HQ9fx5CN/Gk6Vh/kupBTDLU11/nDk/g==}
+  react-dom@18.2.0:
+    resolution: {integrity: sha512-6IMTriUmvsjHUjNtEDudZfuDQUoWXVxKHhlEGSk81n4YFS+r/Kl99wXiwlVXtPBtJenozv2P+hxDsw9eA7Xo6g==}
     peerDependencies:
-      react: ^19.1.0
+      react: ^18.2.0
 
   react-draggable@4.5.0:
     resolution: {integrity: sha512-VC+HBLEZ0XJxnOxVAZsdRi8rD04Iz3SiiKOoYzamjylUcju/hP9np/aZdLHf/7WOD268WMoNJMvYfB5yAK45cw==}
@@ -297,8 +297,8 @@ packages:
   react-is@16.13.1:
     resolution: {integrity: sha512-24e6ynE2H+OKt4kqsOvNd8kBpV65zoxbA4BVsEOB3ARVWQki/DHzaUoC5KuON/BiccDaCCTZBuOcfZs70kR8bQ==}
 
-  react@19.1.0:
-    resolution: {integrity: sha512-FS+XFBNvn3GTAWq26joslQgWNoFu08F4kl0J4CgdNKADkdSGXQyTCnKteIAJy96Br6YbpEU1LSzV5dYtjMkMDg==}
+  react@18.2.0:
+    resolution: {integrity: sha512-/3IjMdb2L9QbBdWiW5e3P2/npwMBaU9mHCSCUzNln0ZCYbcfTsGbTJrU/kGemdH2IWmB2ioZ+zkxtmq6g09fGQ==}
     engines: {node: '>=0.10.0'}
 
   reactjs-popup@2.0.6:
@@ -308,8 +308,8 @@ packages:
       react: '>=16'
       react-dom: '>=16'
 
-  scheduler@0.26.0:
-    resolution: {integrity: sha512-NlHwttCI/l5gCPR3D1nNXtWABUmBwvZpEQiD4IXSbIDq8BzLIK/7Ir5gTFSGZDUu37K5cMNp0hFtzO38sC7gWA==}
+  scheduler@0.23.2:
+    resolution: {integrity: sha512-UOShsPwz7NrMUqhR6t0hWjFduvOzbtv7toDH1/hIrfRNIDBnnBWd0CwJTGvTpngVlmwGCdP9/Zl/tVrDqcuYzQ==}
 
   semver@7.7.2:
     resolution: {integrity: sha512-RF0Fw+rO5AMf9MAyaRXI4AV0Ulj5lMHqVxxdSgiVbixSCXoEmmX/jk0CuJw4+3SqroYO9VoUh+HcuJivvtJemA==}
@@ -506,15 +506,15 @@ snapshots:
 
   nanoid@3.3.11: {}
 
-  next@15.4.5(react-dom@19.1.0(react@19.1.0))(react@19.1.0):
+  next@15.4.5(react-dom@18.2.0(react@18.2.0))(react@18.2.0):
     dependencies:
       '@next/env': 15.4.5
       '@swc/helpers': 0.5.15
       caniuse-lite: 1.0.30001731
       postcss: 8.4.31
-      react: 19.1.0
-      react-dom: 19.1.0(react@19.1.0)
-      styled-jsx: 5.1.6(react@19.1.0)
+      react: 18.2.0
+      react-dom: 18.2.0(react@18.2.0)
+      styled-jsx: 5.1.6(react@18.2.0)
     optionalDependencies:
       '@next/swc-darwin-arm64': 15.4.5
       '@next/swc-darwin-x64': 15.4.5
@@ -545,28 +545,33 @@ snapshots:
       object-assign: 4.1.1
       react-is: 16.13.1
 
-  react-dom@19.1.0(react@19.1.0):
+  react-dom@18.2.0(react@18.2.0):
     dependencies:
-      react: 19.1.0
-      scheduler: 0.26.0
+      loose-envify: 1.4.0
+      react: 18.2.0
+      scheduler: 0.23.2
 
-  react-draggable@4.5.0(react-dom@19.1.0(react@19.1.0))(react@19.1.0):
+  react-draggable@4.5.0(react-dom@18.2.0(react@18.2.0))(react@18.2.0):
     dependencies:
       clsx: 2.1.1
       prop-types: 15.8.1
-      react: 19.1.0
-      react-dom: 19.1.0(react@19.1.0)
+      react: 18.2.0
+      react-dom: 18.2.0(react@18.2.0)
 
   react-is@16.13.1: {}
 
-  react@19.1.0: {}
-
-  reactjs-popup@2.0.6(react-dom@19.1.0(react@19.1.0))(react@19.1.0):
+  react@18.2.0:
     dependencies:
-      react: 19.1.0
-      react-dom: 19.1.0(react@19.1.0)
+      loose-envify: 1.4.0
 
-  scheduler@0.26.0: {}
+  reactjs-popup@2.0.6(react-dom@18.2.0(react@18.2.0))(react@18.2.0):
+    dependencies:
+      react: 18.2.0
+      react-dom: 18.2.0(react@18.2.0)
+
+  scheduler@0.23.2:
+    dependencies:
+      loose-envify: 1.4.0
 
   semver@7.7.2:
     optional: true
@@ -608,9 +613,9 @@ snapshots:
 
   source-map-js@1.2.1: {}
 
-  styled-jsx@5.1.6(react@19.1.0):
+  styled-jsx@5.1.6(react@18.2.0):
     dependencies:
       client-only: 0.0.1
-      react: 19.1.0
+      react: 18.2.0
 
   tslib@2.8.1: {}
