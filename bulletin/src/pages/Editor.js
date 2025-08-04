@@ -3,6 +3,8 @@ import blueprint from '../../public/blueprint.json';
 import Draggable from 'react-draggable';
 import Popup from 'reactjs-popup';
 import Image from 'next/image';
+import '../style/style.css';
+
 
 
 const handleStop = (event, dragElement) => {
@@ -71,7 +73,7 @@ function MakeText(items){   //Handles creating a new element with text
     scale={1}
     onStop={handleStop}
     defaultPosition={{ x: items.xpos, y: items.ypos }}>
-    <div key={items.id}>
+    <div key={items.id} style={{width:"fit-content", height:"fit-content"}}>
       <p id={items.id} style={{color: items.color, fontFamily: items.font, fontSize: items.textSize}}> {items.text} </p>
     </div>
   </Draggable>
@@ -84,7 +86,7 @@ function MakeImg(items){    //Handles creating a new element with an image
     scale={1}
     onStop={handleStop}
     defaultPosition={{ x: items.xpos, y: items.ypos }}>
-    <div key={items.id}>
+    <div key={items.id} style={{width:"fit-content", height:"fit-content"}}>
       <img id={items.id} src={"next.svg"} alt={items.text} width={items.size} height={items.size} draggable="false"></img>
     </div>
   </Draggable>
