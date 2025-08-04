@@ -1,6 +1,6 @@
-import React, {forwardRef, useState} from 'react';
+import React, {useState} from 'react';
 import blueprint from '../../public/blueprint.json';
-import Draggable, {DraggableCore} from 'react-draggable';
+import Draggable from 'react-draggable';
 import Popup from 'reactjs-popup';
 import Image from 'next/image';
 
@@ -20,6 +20,7 @@ export default function EditorBoard(){
   }
 
   return(
+    
     <div id="board">
       <div>
         {/* Adding buttons for customization options */}
@@ -33,7 +34,7 @@ export default function EditorBoard(){
           {/* popup to add new image */}
           <button onClick={AddImage}>Add Image</button>
       </div>
-      
+
       {/* Creating the custom elements */}
       {CreateElements(blueprint)}
     </div>
