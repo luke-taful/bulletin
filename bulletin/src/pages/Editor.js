@@ -4,6 +4,12 @@ import Draggable, {DraggableCore} from 'react-draggable';
 import Popup from 'reactjs-popup';
 import Image from 'next/image';
 
+
+const handleStop = (event, dragElement) => {
+  dragElement.xpos = dragElement.x;
+  dragElement.ypos = dragElement.y;
+};
+
 export default function EditorBoard(){
 
 //Handlers for adding elements
@@ -15,8 +21,6 @@ export default function EditorBoard(){
 
   return(
     <div id="board">
-      {/* Creating the custom elements */}
-      {CreateElements(blueprint)}
       <div>
         {/* Adding buttons for customization options */}
           <button onClick={SaveState}>Save</button>
@@ -29,6 +33,9 @@ export default function EditorBoard(){
           {/* popup to add new image */}
           <button onClick={AddImage}>Add Image</button>
       </div>
+      
+      {/* Creating the custom elements */}
+      {CreateElements(blueprint)}
     </div>
   );
 }
@@ -57,15 +64,6 @@ function CreateElements(items){
 
 
 function MakeText(items){   //Handles creating a new element with text 
-  //These must be draggable in the board editor. This tracks their location so it can be saved
-  const handleStop = (event, dragElement) => {
-    var xpos = dragElement.x;
-    var ypos = dragElement.y;
-    console.log(xpos, ypos);
-    items.xpos = xpos;
-    items.ypos = ypos;
-    console.log(items.xpos, items.ypos);
-  };
   return(
   <Draggable
     grid={[25, 25]}
@@ -73,23 +71,12 @@ function MakeText(items){   //Handles creating a new element with text
     onStop={handleStop}
     defaultPosition={{ x: items.xpos, y: items.ypos }}>
     <div key={items.id}>
-      <p id={items.id} style={{color: items.color, fontFamily: items.font, fontSize: items.textSize}}>
-        {items.text}
-      </p>
+      <p id={items.id} style={{color: items.color, fontFamily: items.font, fontSize: items.textSize}}> {items.text} </p>
     </div>
   </Draggable>
   )}
 
-function MakeImg(items){    //Handles creating a new element with text 
-//Location Tracking when the div is dragged
-  const handleStop = (event, dragElement) => {
-    var xpos = dragElement.x;
-    var ypos = dragElement.y;
-    console.log(xpos, ypos);
-    items.xpos = xpos;
-    items.ypos = ypos;
-    console.log(items.xpos, items.ypos);
-  };
+function MakeImg(items){    //Handles creating a new element with an image
   return(
   <Draggable
     grid={[25, 25]}
@@ -97,8 +84,7 @@ function MakeImg(items){    //Handles creating a new element with text
     onStop={handleStop}
     defaultPosition={{ x: items.xpos, y: items.ypos }}>
     <div key={items.id}>
-      <img id={items.id} src={"next.svg"} alt={items.text} width={items.size} height={items.size}
-      ></img>
+      <img id={items.id} src={"next.svg"} alt={items.text} width={items.size} height={items.size} draggable="false"></img>
     </div>
   </Draggable>
 )}
