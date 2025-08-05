@@ -39,13 +39,16 @@ export default function EditorBoard(){
         {/* Adding buttons for customization options */}
           <button onClick={SaveState}>Save</button>
           {/* popup to add new text */}
-          <Popup trigger={<button>Add Text</button>} position="left center" id="popup"> 
+          <Popup trigger={<button>Add Text</button>} position="left center"> 
             <h4>Add Text:</h4>
             <input type="text" id="textIn"  onChange={(e) => {setTextIn(e.target.value)}}/><br/>
             <button id="atButton" onClick={addText}>Enter</button>
           </Popup>
           {/* popup to add new image */}
-          <button onClick={AddImage}>Add Image</button>
+          {/* <button onClick={AddImage}>Add Image</button> */}
+          <Popup trigger={<button>Add File</button>} position="left center"> 
+            <input type="file" id="myfile" name="myfile"/> 
+          </Popup>
       </div>
 
       {/* Creating the custom elements */}

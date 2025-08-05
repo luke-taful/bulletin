@@ -78,6 +78,14 @@ h1{
   font-size: larger;
 }
 
-.popup{
-  background-color: #111827;
+#popup-1{  
+  padding: 5px;
+  color: #000000;
+  background-color: #c8cedc;
+  border: 1px solid transparent;
+  border-radius: .75rem;
+}
+
+h4{
+  margin: 1px;
 }
