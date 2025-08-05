@@ -1,5 +1,5 @@
 import React, {useState} from 'react';
-import blueprint from '../../public/blueprint.json';
+import JSONBlueprint from '../../public/blueprint.json';
 import Draggable from 'react-draggable';
 import Popup from 'reactjs-popup';
 import Image from 'next/image';
@@ -14,11 +14,22 @@ const handleStop = (event, dragElement) => {
 
 export default function EditorBoard(){
 
-//Handlers for adding elements
-  const[value, setValue] = useState("");
-  //I have no idea why, but unless I handle the onclick like this, it adds a new element onChange
-  function handle() {
-    AddText(value);
+  const [blueprint, setBlueprint] = useState(JSONBlueprint);
+  const [idNum, setIdNum] = useState(blueprint.length + 1)
+  const [textIn, setTextIn] = useState("");
+
+  const addText = () => {
+    setBlueprint([ ...blueprint,{
+        id:idNum,
+       type:"text",
+        text: textIn, 
+        color:"black",
+        font:"Arial, Helvetica, sans-serif",
+        textSize:"smaller",
+        xpos:100,
+        ypos:200
+    }]);
+    setIdNum(idNum + 1);
   }
 
   return(
@@ -28,10 +39,10 @@ export default function EditorBoard(){
         {/* Adding buttons for customization options */}
           <button onClick={SaveState}>Save</button>
           {/* popup to add new text */}
-          <Popup trigger={<button> Add Text</button>} position="left center"> 
+          <Popup trigger={<button>Add Text</button>} position="left center" id="popup"> 
             <h4>Add Text:</h4>
-            <input type="text" id="textIn"  onChange={(e) => {setValue(e.target.value)}}/><br/>
-            <button id="atButton" onClick={handle}>Enter</button>
+            <input type="text" id="textIn"  onChange={(e) => {setTextIn(e.target.value)}}/><br/>
+            <button id="atButton" onClick={addText}>Enter</button>
           </Popup>
           {/* popup to add new image */}
           <button onClick={AddImage}>Add Image</button>
@@ -44,6 +55,7 @@ export default function EditorBoard(){
 }
 
 function CreateElements(items){
+  console.log(items);
   //Create each custom element from the json blueprint and store in a list.
   const elements = items.map((item) => {
     const tempElements = [];
@@ -73,7 +85,7 @@ function MakeText(items){   //Handles creating a new element with text
     scale={1}
     onStop={handleStop}
     defaultPosition={{ x: items.xpos, y: items.ypos }}>
-    <div key={items.id} style={{width:"fit-content", height:"fit-content"}}>
+    <div key={items.id} style={{width:"fit-content", height:"fit-content", cursor:"crosshair"}}>
       <p id={items.id} style={{color: items.color, fontFamily: items.font, fontSize: items.textSize}}> {items.text} </p>
     </div>
   </Draggable>
@@ -86,27 +98,12 @@ function MakeImg(items){    //Handles creating a new element with an image
     scale={1}
     onStop={handleStop}
     defaultPosition={{ x: items.xpos, y: items.ypos }}>
-    <div key={items.id} style={{width:"fit-content", height:"fit-content"}}>
+    <div key={items.id} style={{width:"fit-content", height:"fit-content", cursor:"crosshair"}}>
       <img id={items.id} src={"next.svg"} alt={items.text} width={items.size} height={items.size} draggable="false"></img>
     </div>
   </Draggable>
 )}
 
-
-
-function AddText(textIn){
-    blueprint.push({
-        id:4,
-       type:"text",
-        text: textIn, 
-        color:"white",
-        font:"Arial, Helvetica, sans-serif",
-        textSize:"smaller",
-        xpos:100,
-        ypos:200
-    });
-    console.log(blueprint);
-}
 
 function AddImage(){
      //Open local file explorer
