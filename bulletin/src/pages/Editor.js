@@ -5,8 +5,7 @@ import Popup from 'reactjs-popup';
 import Image from 'next/image';
 import '../style/style.css';
 
-
-
+//Draggable Position Handling
 const handleStop = (event, dragElement) => {
   dragElement.xpos = dragElement.x;
   dragElement.ypos = dragElement.y;
@@ -19,6 +18,8 @@ export default function EditorBoard(){
   const [textIn, setTextIn] = useState("");
   const [imgIn, setImgIn] = useState("");
 
+
+  //Manage adding new Elements
   const addText = () => {
     setBlueprint([ ...blueprint,{
         id:idNum,
@@ -32,7 +33,6 @@ export default function EditorBoard(){
     }]);
     setIdNum(idNum + 1);
   }
-
   const AddImage = () => {
     setBlueprint([ ...blueprint,{
       id:idNum,
@@ -45,8 +45,13 @@ export default function EditorBoard(){
     setIdNum(idNum + 1);
   }
 
+  //Preserving blueprint
+  function SaveState(){
+    const blueprintString = JSON.stringify(blueprint);
+    console.log(blueprintString);
+  }
+
   return(
-    
     <div id="board">
       <div>
         {/* Adding buttons for customization options */}
@@ -64,7 +69,6 @@ export default function EditorBoard(){
             <button id="atButton" onClick={AddImage}>Enter</button>
           </Popup>
       </div>
-
       {/* Creating the custom elements */}
       {CreateElements(blueprint)}
     </div>
@@ -93,7 +97,6 @@ function CreateElements(items){
   );
 }
 
-
 function MakeText(items){   //Handles creating a new element with text 
   return(
   <Draggable
@@ -119,7 +122,3 @@ function MakeImg(items){    //Handles creating a new element with an image
     </div>
   </Draggable>
 )}
-
-function SaveState(blueprint){
-  const blueprintString = JSON.stringify(blueprint);
-}
