@@ -78,12 +78,21 @@ h1{
   font-size: larger;
 }
 
-#popup-1{  
+#popup-1, #popup-2{  
   padding: 5px;
   color: #000000;
   background-color: #c8cedc;
   border: 1px solid transparent;
   border-radius: .75rem;
+}
+
+#imgIn{
+  background-color: #c8cedc;
+  border: 1px solid transparent;
+  border-radius: .75rem;
+  font-family: "Inter var",ui-sans-serif,system-ui,-apple-system,system-ui,"Segoe UI",Roboto,"Helvetica Neue",Arial,"Noto Sans",sans-serif,"Apple Color Emoji","Segoe UI Emoji","Segoe UI Symbol","Noto Color Emoji";
+  font-size: 1rem;
+  line-height: 1.5rem;
 }
 
 h4{

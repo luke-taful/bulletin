@@ -22,7 +22,7 @@
     {
     "id":3,
     "type":"img",
-    "src": "./style/pfp.jpg", 
+    "src": "./globe.svg", 
     "text":"placeholder",
     "size":100,
     "xpos":500,

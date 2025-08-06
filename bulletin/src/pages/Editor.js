@@ -17,6 +17,7 @@ export default function EditorBoard(){
   const [blueprint, setBlueprint] = useState(JSONBlueprint);
   const [idNum, setIdNum] = useState(blueprint.length + 1)
   const [textIn, setTextIn] = useState("");
+  const [imgIn, setImgIn] = useState("");
 
   const addText = () => {
     setBlueprint([ ...blueprint,{
@@ -30,6 +31,20 @@ export default function EditorBoard(){
         ypos:200
     }]);
     setIdNum(idNum + 1);
+  }
+
+  const AddImage = () => {
+    console.log(URL.createObjectURL(imgIn));
+    setBlueprint([ ...blueprint,{
+      id:idNum,
+      type:"img",
+      src:URL.createObjectURL(imgIn),
+      text:"Image Unavailible",
+      xpos:100,
+      ypos:200
+    }]);
+    setIdNum(idNum + 1);
+    console.log(blueprint);
   }
 
   return(
@@ -47,7 +62,8 @@ export default function EditorBoard(){
           {/* popup to add new image */}
           {/* <button onClick={AddImage}>Add Image</button> */}
           <Popup trigger={<button>Add File</button>} position="left center"> 
-            <input type="file" id="myfile" name="myfile"/> 
+            <input type="file" id="imgIn" name="imgIn" accept="image/png, image/jpeg" onChange={(e) => {setImgIn(e.target.files[0])}}/> 
+            <button id="atButton" onClick={AddImage}>Enter</button>
           </Popup>
       </div>
 
@@ -102,16 +118,10 @@ function MakeImg(items){    //Handles creating a new element with an image
     onStop={handleStop}
     defaultPosition={{ x: items.xpos, y: items.ypos }}>
     <div key={items.id} style={{width:"fit-content", height:"fit-content", cursor:"crosshair"}}>
-      <img id={items.id} src={"next.svg"} alt={items.text} width={items.size} height={items.size} draggable="false"></img>
+      <img id={items.id} src={items.src} alt={items.text} width={items.size} height={items.size} draggable="false"></img>
     </div>
   </Draggable>
 )}
-
-
-function AddImage(){
-     //Open local file explorer
-     //There should be some file type checking here
-}
 
 function SaveState(blueprint){
   const blueprintString = JSON.stringify(blueprint);
