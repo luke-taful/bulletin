@@ -34,7 +34,6 @@ export default function EditorBoard(){
   }
 
   const AddImage = () => {
-    console.log(URL.createObjectURL(imgIn));
     setBlueprint([ ...blueprint,{
       id:idNum,
       type:"img",
@@ -44,7 +43,6 @@ export default function EditorBoard(){
       ypos:200
     }]);
     setIdNum(idNum + 1);
-    console.log(blueprint);
   }
 
   return(
@@ -74,7 +72,6 @@ export default function EditorBoard(){
 }
 
 function CreateElements(items){
-  console.log(items);
   //Create each custom element from the json blueprint and store in a list.
   const elements = items.map((item) => {
     const tempElements = [];
