@@ -1,6 +1,7 @@
 import Image from "next/image";
 import styles from "./page.module.css";
 import layout from "./layout.js";
+import Board from "../pages/Board";
 
 async function getBP(){
   const url = "http://localhost:5000";
@@ -25,7 +26,7 @@ export default function Home() {
   return (
     <div className={styles.page}>
       <layout>
-        <p>hello world!</p>
+        <Board/>
       </layout>
     </div>
   );
