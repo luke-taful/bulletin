@@ -1,14 +1,31 @@
-import blueprint from '../../public/blueprint.json';
+import localBlueprint from '../../public/blueprint.json';
 import Image from 'next/image';
-
+import React, {useEffect, useState} from "react";
 
 export default function Board(){
-    return(
-      <div id="board">
-        {CreateElements(blueprint)}
-      </div>
-    )
-  }
+
+  const [blueprint, setBlueprint] = useState({});
+  const [userElements, setUserElements] = useState(CreateElements(localBlueprint));
+
+  useEffect(() => {
+
+    const fetchBP = async () => {
+      const tempBP = await fetch("/api/");
+      const bpJson = await tempBP.json()
+      // console.log(bpJson);
+      setBlueprint(bpJson);
+    }
+    fetchBP()
+  }, []);
+  console.log(blueprint);
+  console.log(localBlueprint)
+  return(
+    <div id="board">
+      {userElements}
+    </div>
+  )
+}
+
 
 function CreateElements(items){
   const elements = items.map(items => {
