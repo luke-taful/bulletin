@@ -1,27 +1,29 @@
+"use client"
 import localBlueprint from '../../public/blueprint.json';
 import Image from 'next/image';
 import React, {useEffect, useState} from "react";
 
 export default function Board(){
 
-  const [blueprint, setBlueprint] = useState({});
-  const [userElements, setUserElements] = useState(CreateElements(localBlueprint));
+  const [blueprint, setBlueprint] = useState();
+  // const [userElements, setUserElements] = useState(CreateElements(localBlueprint));
+  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
 
-    const fetchBP = async () => {
-      const tempBP = await fetch("/api/");
-      const bpJson = await tempBP.json()
-      // console.log(bpJson);
-      setBlueprint(bpJson);
-    }
-    fetchBP()
+   fetch('/api/')
+      .then((response) => response.json())
+      .then((data) => {
+        setBlueprint(data);
+        setLoading(false);
+      });
   }, []);
-  console.log(blueprint);
-  console.log(localBlueprint)
+
+  if (loading) return <p>Loading...</p>;
+
   return(
     <div id="board">
-      {userElements}
+      {CreateElements(blueprint)}
     </div>
   )
 }
