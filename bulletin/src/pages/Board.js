@@ -56,7 +56,7 @@ function CreateElements(items){
       if(items.type == "img"){
         tempElements.push(
           <div key={items.id}>
-            <img src={"/next.svg"} alt={items.text} width={items.size} height={items.size}
+            <img src={items.src} alt={items.text} width={items.size} height={items.size}
             style={{position:'absolute', top: items.ypos, left: items.xpos}}
             ></img>
           </div>

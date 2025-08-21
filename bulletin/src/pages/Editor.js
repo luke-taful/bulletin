@@ -1,8 +1,6 @@
 import React, {useState} from 'react';
-import JSONBlueprint from '../../public/blueprint.json';
 import Draggable from 'react-draggable';
 import Popup from 'reactjs-popup';
-import Image from 'next/image';
 import '../style/style.css';
 
 //Draggable Position Handling
