@@ -1,4 +1,5 @@
 "use client"
+import localBP from "../../public/blueprint.json"
 import React, {useEffect, useState} from "react";
 import { Editor } from "./Editor"
 
@@ -19,10 +20,12 @@ export default function Board(){
   }, []);
 
   if (loading){return <p>Loading...</p>};
-
   if(editing){
-    return <Editor/> ;
-    // setEditing={setEditing} blueprint = {blueprint}
+    return(    
+      <div>
+        <Editor blueprint={blueprint} /> ;
+      </div>
+    );
   };
 
   const handleClick = () => {setEditing(true)};
