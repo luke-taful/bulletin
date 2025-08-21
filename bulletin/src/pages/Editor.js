@@ -11,16 +11,16 @@ const handleStop = (event, dragElement) => {
   dragElement.ypos = dragElement.y;
 };
 
-export function Editor({ blueprint }){
-  const [bp, setBlueprint] = useState(blueprint);
-  const [idNum, setIdNum] = useState(bp.length + 1)
+export function Editor({ blueprint, setBlueprint, setEditing }){
+  
+  const [idNum, setIdNum] = useState(blueprint.length + 1)
   const [textIn, setTextIn] = useState("");
   const [imgIn, setImgIn] = useState("");
 
 
   //Manage adding new Elements
   const addText = () => {
-    setBlueprint([ ...bp,{
+    setBlueprint([ ...blueprint,{
         id:idNum,
        type:"text",
         text: textIn, 
@@ -33,7 +33,7 @@ export function Editor({ blueprint }){
     setIdNum(idNum + 1);
   }
   const AddImage = () => {
-    setBlueprint([ ...bp,{
+    setBlueprint([ ...blueprint,{
       id:idNum,
       type:"img",
       src:URL.createObjectURL(imgIn),
@@ -46,8 +46,9 @@ export function Editor({ blueprint }){
 
   //Preserving blueprint
   function SaveState(){
-    const blueprintString = JSON.stringify(bp);
+    const blueprintString = JSON.stringify(blueprint);
     console.log(blueprintString);
+    setEditing(false);
   }
 
   return(
@@ -68,7 +69,7 @@ export function Editor({ blueprint }){
           </Popup>
       </div>
       {/* Creating the custom elements */}
-      {CreateElements(bp)}
+      {CreateElements(blueprint)}
     </div>
   );
 }

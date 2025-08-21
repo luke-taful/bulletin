@@ -23,7 +23,7 @@ export default function Board(){
   if(editing){
     return(    
       <div>
-        <Editor blueprint={blueprint} /> ;
+        <Editor blueprint={blueprint} setBlueprint={setBlueprint} setEditing={setEditing} /> ;
       </div>
     );
   };
