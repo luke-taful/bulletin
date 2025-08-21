@@ -11,7 +11,7 @@ const handleStop = (event, dragElement) => {
   dragElement.ypos = dragElement.y;
 };
 
-export default function EditorBoard(){
+export function Editor(){
 
   const [blueprint, setBlueprint] = useState(JSONBlueprint);
   const [idNum, setIdNum] = useState(blueprint.length + 1)
@@ -63,7 +63,6 @@ export default function EditorBoard(){
             <button id="atButton" onClick={addText}>Enter</button>
           </Popup>
           {/* popup to add new image */}
-          {/* <button onClick={AddImage}>Add Image</button> */}
           <Popup trigger={<button>Add File</button>} position="left center"> 
             <input type="file" id="imgIn" name="imgIn" accept="image/png, image/jpeg" onChange={(e) => {setImgIn(e.target.files[0])}}/> 
             <button id="atButton" onClick={AddImage}>Enter</button>

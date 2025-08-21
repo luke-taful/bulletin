@@ -1,13 +1,12 @@
 "use client"
-import localBlueprint from '../../public/blueprint.json';
-import Image from 'next/image';
 import React, {useEffect, useState} from "react";
+import { Editor } from "./Editor"
 
 export default function Board(){
 
   const [blueprint, setBlueprint] = useState();
-  // const [userElements, setUserElements] = useState(CreateElements(localBlueprint));
   const [loading, setLoading] = useState(true);
+  const [editing, setEditing] = useState(false);
 
   useEffect(() => {
 
@@ -19,11 +18,19 @@ export default function Board(){
       });
   }, []);
 
-  if (loading) return <p>Loading...</p>;
+  if (loading){return <p>Loading...</p>};
+
+  if(editing){
+    return <Editor/> ;
+    // setEditing={setEditing} blueprint = {blueprint}
+  };
+
+  const handleClick = () => {setEditing(true)};
 
   return(
     <div id="board">
       {CreateElements(blueprint)}
+      <button onClick={handleClick}>Edit</button>
     </div>
   )
 }
