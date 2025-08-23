@@ -25,8 +25,8 @@ export function Editor({ blueprint, setBlueprint, setEditing }){
         color:"black",
         font:"Arial, Helvetica, sans-serif",
         textSize:"smaller",
-        xpos:100,
-        ypos:200
+        xpos:500,
+        ypos:500
     }]);
     setIdNum(idNum + 1);
   }
@@ -36,8 +36,8 @@ export function Editor({ blueprint, setBlueprint, setEditing }){
       type:"img",
       src:URL.createObjectURL(imgIn),
       text:"Image Unavailible",
-      xpos:100,
-      ypos:200
+      xpos:500,
+      ypos:500
     }]);
     setIdNum(idNum + 1);
   }
@@ -46,6 +46,7 @@ export function Editor({ blueprint, setBlueprint, setEditing }){
   function SaveState(){
     const blueprintString = JSON.stringify(blueprint);
     console.log(blueprintString);
+    setBlueprint(blueprint);
     setEditing(false);
   }
 
