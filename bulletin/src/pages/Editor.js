@@ -38,7 +38,18 @@ export function Editor({ blueprint, setBlueprint, setEditing }){
 
   //Preserving blueprint
   function SaveState(){
-    setBlueprint(blueprint);
+
+    fetch('/api/', {
+      method: 'POST',
+      headers: {'Content-type' : 'application/json'},
+      body: JSON.stringify({message: "HI THERE!"})
+    })
+    // .then((response) => response.json())
+    // .then((result) => {
+    //   console.log(result);
+    // });
+
+
     setEditing(false);
   }
 
