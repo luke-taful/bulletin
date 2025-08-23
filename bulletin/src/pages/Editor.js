@@ -38,7 +38,6 @@ export function Editor({ blueprint, setBlueprint, setEditing }){
 
   //Preserving blueprint
   function SaveState(){
-    console.log(blueprint);
     setBlueprint(blueprint);
     setEditing(false);
   }
@@ -47,8 +46,10 @@ export function Editor({ blueprint, setBlueprint, setEditing }){
   const handleStop = (event, dragElement) => {
     dragElement.xpos = dragElement.x;
     dragElement.ypos = dragElement.y;
-    const item = blueprint[(event.target.id)];
-    console.log(item)
+    var updateBP = blueprint;
+    updateBP[(event.target.id)].xpos = dragElement.xpos;
+    updateBP[(event.target.id)].ypos = dragElement.ypos;
+    setBlueprint(updateBP);
   };
 
   function CreateElements(items){
