@@ -3,15 +3,9 @@ import Draggable from 'react-draggable';
 import Popup from 'reactjs-popup';
 import '../style/style.css';
 
-//Draggable Position Handling
-const handleStop = (event, dragElement) => {
-  dragElement.xpos = dragElement.x;
-  dragElement.ypos = dragElement.y;
-};
-
 export function Editor({ blueprint, setBlueprint, setEditing }){
   
-  const [idNum, setIdNum] = useState(blueprint.length + 1)
+  const [idNum, setIdNum] = useState(blueprint.length)
   const [textIn, setTextIn] = useState("");
   const [imgIn, setImgIn] = useState("");
 
@@ -44,47 +38,27 @@ export function Editor({ blueprint, setBlueprint, setEditing }){
 
   //Preserving blueprint
   function SaveState(){
-    const blueprintString = JSON.stringify(blueprint);
-    console.log(blueprintString);
+    console.log(blueprint);
     setBlueprint(blueprint);
     setEditing(false);
   }
 
-  return(
-    <div id="board">
-      <div>
-        {/* Adding buttons for customization options */}
-          <button onClick={SaveState}>Save</button>
-          {/* popup to add new text */}
-          <Popup trigger={<button>Add Text</button>} position="left center"> 
-            <h4>Add Text:</h4>
-            <input type="text" id="textIn"  onChange={(e) => {setTextIn(e.target.value)}}/><br/>
-            <button id="atButton" onClick={addText}>Enter</button>
-          </Popup>
-          {/* popup to add new image */}
-          <Popup trigger={<button>Add File</button>} position="left center"> 
-            <input type="file" id="imgIn" name="imgIn" accept="image/png, image/jpeg" onChange={(e) => {setImgIn(e.target.files[0])}}/> 
-            <button id="atButton" onClick={AddImage}>Enter</button>
-          </Popup>
-      </div>
-      {/* Creating the custom elements */}
-      {CreateElements(blueprint)}
-    </div>
-  );
-}
+  //Draggable Position Handling
+  const handleStop = (event, dragElement) => {
+    dragElement.xpos = dragElement.x;
+    dragElement.ypos = dragElement.y;
+    const item = blueprint[(event.target.id)];
+    console.log(item)
+  };
 
-function CreateElements(items){
+  function CreateElements(items){
   //Create each custom element from the json blueprint and store in a list.
   const elements = items.map((item) => {
-    const tempElements = [];
+    var tempElements = null;
     if(item.type == "text"){
-        tempElements.push(
-          MakeText(item)
-      )}
+        tempElements = MakeText(item)}
       if(item.type == "img"){
-        tempElements.push(
-          MakeImg(item)
-      )}
+        tempElements = MakeImg(item)}
     return tempElements;
   })
   //Wrap in another div, as react can only return 1 element per function.
@@ -120,3 +94,26 @@ function MakeImg(items){    //Handles creating a new element with an image
     </div>
   </Draggable>
 )}
+
+  return(
+    <div id="board">
+      <div>
+        {/* Adding buttons for customization options */}
+          <button onClick={SaveState}>Save</button>
+          {/* popup to add new text */}
+          <Popup trigger={<button>Add Text</button>} position="left center"> 
+            <h4>Add Text:</h4>
+            <input type="text" id="textIn"  onChange={(e) => {setTextIn(e.target.value)}}/><br/>
+            <button id="atButton" onClick={addText}>Enter</button>
+          </Popup>
+          {/* popup to add new image */}
+          <Popup trigger={<button>Add File</button>} position="left center"> 
+            <input type="file" id="imgIn" name="imgIn" accept="image/png, image/jpeg" onChange={(e) => {setImgIn(e.target.files[0])}}/> 
+            <button id="atButton" onClick={AddImage}>Enter</button>
+          </Popup>
+      </div>
+      {/* Creating the custom elements */}
+      {CreateElements(blueprint)}
+    </div>
+  );
+}

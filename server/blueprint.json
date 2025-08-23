@@ -1,6 +1,6 @@
 [
         {
-        "id":1,
+        "id":0,
         "type":"text",
         "text":"HelloWorld! Loading from a JSON",
         "color":"green",
@@ -10,7 +10,7 @@
         "ypos":10
     },
     {
-        "id":2,
+        "id":1,
         "type":"text",
         "text":"HelloWorld! Loading JSON Again",
         "color":"magenta",
@@ -20,7 +20,7 @@
         "ypos":200
     },
     {
-    "id":3,
+    "id":2,
     "type":"img",
     "src": "./globe.svg", 
     "text":"Image Unavailible",
