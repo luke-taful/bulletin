@@ -37,20 +37,26 @@ export function Editor({ blueprint, setBlueprint, setEditing }){
   }
 
   //Preserving blueprint
-  function SaveState(){
+  async function SaveState(){
+    
+    let success = false;
 
-    fetch('/api/', {
+    await fetch('/api/', {
       method: 'POST',
       headers: {'Content-type' : 'application/json'},
-      body: JSON.stringify({message: "HI THERE!"})
+      body: JSON.stringify({blueprint})
     })
-    // .then((response) => response.json())
-    // .then((result) => {
-    //   console.log(result);
-    // });
+    .then((response) => response)
+    .then((result) => {
+      success = result.ok;
+    });
 
-
-    setEditing(false);
+    if (success == true){
+      setEditing(false);
+    }
+    else{
+      alert("Error when saving, please try again.");
+    }
   }
 
   //Draggable Position Handling
