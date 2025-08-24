@@ -1,6 +1,7 @@
 const Express = require("express");
-const blueprint = require("./blueprint.json");
-// import Cors from "cors";
+var blueprint = require("./blueprint.json");
+const fs = require("fs");
+
 const app = Express();
 app.use(Express.json());
 const port = 5000;
@@ -10,8 +11,14 @@ app.get('/', (req, res) => {
 });
 
 app.post('/', (req, res) => {
-  console.log(req.body);
-
+  blueprint = (req.body.blueprint);
+  const newBP = JSON.stringify(blueprint);
+  fs.writeFile("blueprint.json", newBP, (error) => {
+    if (error) {
+      console.error(error);
+      throw error;
+    }
+  });
   res.send();
 });
 
