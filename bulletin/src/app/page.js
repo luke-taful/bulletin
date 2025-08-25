@@ -1,13 +1,16 @@
 import Image from "next/image";
-import styles from "./page.module.css";
+import "../style/style.css";
 import layout from "./layout.js";
 import Board from "../pages/Board";
+import Login from "../pages/Login";
+
 
 export default function Home() {
+
   return (
-    <div className={styles.page}>
+    <div className="page">
       <layout>
-        <p>Hello World!</p>
+        <Login/>
       </layout>
     </div>
   );
