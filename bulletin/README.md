@@ -31,6 +31,7 @@ Upcoming developments:
     - text colour, font, effects
     - background colour, pattern, image?
     - item z value
+    - grid snapping
 
 - Share system / feed to discover other people's boards 
     - privacy options
