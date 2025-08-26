@@ -28,7 +28,6 @@ export default function Login(){
         .then((response) => response)
         .then((result) => {
         success = result.ok;
-        console.log(result);
         });
     }
 

@@ -31,6 +31,7 @@ export default function NewUser({setRegister}){
         .then((response) => response)
         .then((result) => {
         success = result.ok;
+        console.log(result);
         return(success);
         });
     }

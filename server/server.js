@@ -2,6 +2,7 @@ const Express = require("express");
 var blueprint = require("./blueprint.json");
 var users = require("./users.json");
 const fs = require("fs");
+const { exit } = require("process");
 
 const app = Express();
 app.use(Express.json());
@@ -30,15 +31,27 @@ app.post('/login', (req, res) =>{
 
 app.post('/register', (req, res) =>{
   const newUser = (req.body.userData);
-  users.push(newUser);
-  const usersStr = JSON.stringify(users);
+  var exists = false;
 
-  fs.writeFile("users.json", usersStr, (error) => {
-    if (error) {
-      console.error(error);
-      throw error;
+  //Check if username exists already
+  for(i=0; i<users.length; i++){
+    console.log(users[i].username, newUser.username);
+    if (users[i].username == newUser.username){
+      exists = true;
+      break;
     }
-  });
+  }
+  if(exists == false){
+    //Add user data to the store
+    users.push(newUser);
+    const usersStr = JSON.stringify(users);
+    fs.writeFile("users.json", usersStr, (error) => {
+      if (error) {
+        console.error(error);
+        throw error;
+      }
+    });
+  }
   res.send();
 });
 
