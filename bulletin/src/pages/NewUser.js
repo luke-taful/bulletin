@@ -12,23 +12,26 @@ export default function NewUser({setRegister}){
         e.preventDefault();
         setPending(true);
         if(username != "" && password != "" && password == passValid){
-            newUserRequest();
+            var success = newUserRequest();
         }
         setPending(false);
-        setRegister(false);
+        if(success){
+            setRegister(false);
+        }
     };
 
     async function newUserRequest(){
         let success = false;
+        const userData = {"username" : username, "password" : btoa(password)};
         await fetch('/register/', {
             method: 'POST',
             headers: {'Content-type' : 'application/json'},
-            body: JSON.stringify({"username" : username, "password" : password})
+            body: JSON.stringify({userData})
         })
         .then((response) => response)
         .then((result) => {
         success = result.ok;
-        console.log(result);
+        return(success);
         });
     }
 

@@ -23,7 +23,7 @@ export default function Login(){
         await fetch('/login/', {
             method: 'POST',
             headers: {'Content-type' : 'application/json'},
-            body: JSON.stringify({"username" : username, "password" : password})
+            body: JSON.stringify({"username" : username, "password" : btoa(password)})
         })
         .then((response) => response)
         .then((result) => {

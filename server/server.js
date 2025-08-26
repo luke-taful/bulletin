@@ -1,5 +1,6 @@
 const Express = require("express");
 var blueprint = require("./blueprint.json");
+var users = require("./users.json");
 const fs = require("fs");
 
 const app = Express();
@@ -28,8 +29,17 @@ app.post('/login', (req, res) =>{
 });
 
 app.post('/register', (req, res) =>{
-  console.log(req.body);
-  res.send()
+  const newUser = (req.body.userData);
+  users.push(newUser);
+  const usersStr = JSON.stringify(users);
+
+  fs.writeFile("users.json", usersStr, (error) => {
+    if (error) {
+      console.error(error);
+      throw error;
+    }
+  });
+  res.send();
 });
 
 app.listen(port, () => {
