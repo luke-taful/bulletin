@@ -10,9 +10,27 @@ export default function NewUser({setRegister}){
 
     const handleSubmit = (e) => {
         e.preventDefault();
-        console.log("New User");
+        setPending(true);
+        if(username != "" && password != "" && password == passValid){
+            newUserRequest();
+        }
+        setPending(false);
         setRegister(false);
     };
+
+    async function newUserRequest(){
+        let success = false;
+        await fetch('/register/', {
+            method: 'POST',
+            headers: {'Content-type' : 'application/json'},
+            body: JSON.stringify({"username" : username, "password" : password})
+        })
+        .then((response) => response)
+        .then((result) => {
+        success = result.ok;
+        console.log(result);
+        });
+    }
 
     return(
         <div className='formContainer'>
@@ -24,7 +42,7 @@ export default function NewUser({setRegister}){
                 <input className="formElement" value={password} onChange={(e) => setPassword(e.target.value)}></input>
                 <label className="formElement">Confirm Password:</label>
                 <input className="formElement" value={passValid} onChange={(e) => setPassValid(e.target.value)}></input>
-                <button  disabled={false}>Register User</button>
+                <button  disabled={pending}>Register User</button>
                 {/* style={buttonDisabled ? formButtonDisabled : formButton} */}
                 <p/>
             </form>

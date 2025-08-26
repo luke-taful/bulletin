@@ -6,11 +6,11 @@ const app = Express();
 app.use(Express.json());
 const port = 5000;
 
-app.get('/', (req, res) => {
+app.get('/blueprint', (req, res) => {
   res.send(blueprint);
 });
 
-app.post('/', (req, res) => {
+app.post('/blueprint', (req, res) => {
   blueprint = (req.body.blueprint);
   const newBP = JSON.stringify(blueprint);
   fs.writeFile("blueprint.json", newBP, (error) => {
@@ -20,6 +20,16 @@ app.post('/', (req, res) => {
     }
   });
   res.send();
+});
+
+app.post('/login', (req, res) =>{
+  console.log(req.body);
+  res.send()
+});
+
+app.post('/register', (req, res) =>{
+  console.log(req.body);
+  res.send()
 });
 
 app.listen(port, () => {

@@ -11,7 +11,7 @@ export default function Board(){
 
   useEffect(() => {
 
-   fetch('/api/')
+   fetch('/blueprint/')
       .then((response) => response.json())
       .then((data) => {
         setBlueprint(data);

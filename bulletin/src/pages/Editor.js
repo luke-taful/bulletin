@@ -41,7 +41,7 @@ export function Editor({ blueprint, setBlueprint, setEditing }){
     
     let success = false;
 
-    await fetch('/api/', {
+    await fetch('/blueprint/', {
       method: 'POST',
       headers: {'Content-type' : 'application/json'},
       body: JSON.stringify({blueprint})
