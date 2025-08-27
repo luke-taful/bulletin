@@ -1,8 +1,7 @@
 const Express = require("express");
-var blueprint = require("./blueprint.json");
+var blueprint = require("./blueprints/default.json");
 var users = require("./users.json");
 const fs = require("fs");
-const { exit } = require("process");
 
 const app = Express();
 app.use(Express.json());
