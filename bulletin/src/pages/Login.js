@@ -46,10 +46,10 @@ export default function Login(){
                     <p/>
                     <label className="formElement">Password:</label>
                     <input className="formElement" value={password} onChange={(e) => setPassword(e.target.value)}></input>
-                    <button disabled={pending}>Login</button>
+                    <button className="formButton" disabled={pending}>Login</button>
                     <p/>
                 </form>
-                <button onClick={() => setRegister(true)}>Register New User</button>
+                <button className="formButton" onClick={() => setRegister(true)}>Register New User</button>
             </div>
         );
     }

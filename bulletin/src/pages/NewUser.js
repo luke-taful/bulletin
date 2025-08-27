@@ -7,6 +7,7 @@ export default function NewUser({setRegister}){
     const [passValid, setPassValid] = useState("");
     const [username, setUsername] = useState("");
     const [pending, setPending] = useState("");
+    const [errorList, setErrorList] = useState([]);
 
     async function newUserRequest(){
         const userData = {"username" : username, "password" : btoa(password)};
@@ -17,26 +18,38 @@ export default function NewUser({setRegister}){
         })
         .then((response) => response.json())
         .then((result) => {
-            console.log(result);
             return(result.success);
         });
     }
 
-
-    const handleSubmit = async (e) => {
+    const handleSubmit = (e) => {
         e.preventDefault();
+        const tempFlags = [];
+        
+        if(username == "" || password == ""){
+            tempFlags.push("Please enter a valid username and password");
+        }
+        if(password != passValid){
+            tempFlags.push("Passwords do not match");
+        }
+
+        if(tempFlags.length == 0){handleNewUser()}
+
+        else{setErrorList(tempFlags.map((flag, index) => (<li key={index}>{flag}</li>)));}
+    }
+
+    const handleNewUser = async () => {
+        setErrorList("");
         setPending(true);
         var success = false;
-        if(username != "" && password != "" && password == passValid){
-            success = await newUserRequest();
-        }
+        
+        success = await newUserRequest();
         setPending(false);
-        console.log(success);
         if(success){
             alert("User Created Successfully");
             setRegister(false);
         }
-        else{alert("User already exists");}
+        else{setErrorList(["User already exists"]);}
     };
 
     return(
@@ -49,11 +62,12 @@ export default function NewUser({setRegister}){
                 <input className="formElement" value={password} onChange={(e) => setPassword(e.target.value)}></input>
                 <label className="formElement">Confirm Password:</label>
                 <input className="formElement" value={passValid} onChange={(e) => setPassValid(e.target.value)}></input>
-                <button  disabled={pending}>Register User</button>
+                <label className="errorLabel">{errorList}</label>
+                <button className='formButton' disabled={pending}>Register User</button>
                 {/* style={buttonDisabled ? formButtonDisabled : formButton} */}
                 <p/>
             </form>
-            <button onClick={() => setRegister(false)}>Back to Login</button>
+            <button className='formButton' onClick={() => setRegister(false)}>Back to Login</button>
         </div>
     );
 }
