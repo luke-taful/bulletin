@@ -28,11 +28,10 @@ export default function NewUser({setRegister}){
             headers: {'Content-type' : 'application/json'},
             body: JSON.stringify({userData})
         })
-        .then((response) => response)
+        .then((response) => response.json())
         .then((result) => {
-        success = result.ok;
         console.log(result);
-        return(success);
+        return(result.success);
         });
     }
 

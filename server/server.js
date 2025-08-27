@@ -31,32 +31,25 @@ app.post('/login', (req, res) =>{
 
 app.post('/register', (req, res) =>{
   const newUser = (req.body.userData);
-  var exists = false;
 
   //Check if username exists already
   for(i=0; i<users.length; i++){
-    console.log(users[i].username, newUser.username);
     if (users[i].username == newUser.username){
-      exists = true;
-      break;
+      return res.json({ success: false, message: "User already exists" });
     }
   }
-  if(exists == false){
-    //Add user data to the store
-    users.push(newUser);
-    const usersStr = JSON.stringify(users);
-    fs.writeFile("users.json", usersStr, (error) => {
-      if (error) {
-        console.error(error);
-        throw error;
-      }
-    });
-  }
-  res.send();
+
+  //Otherwise add user data to the store
+  users.push(newUser);
+  const usersStr = JSON.stringify(users);
+  fs.writeFile("users.json", usersStr, (error) => {
+    if (error) {
+      console.error(error);
+      throw error;
+    }
+  });
+  res.json({ success: true, message: "User registered successfully"});
 });
 
-app.listen(port, () => {
-
-    console.log('Listening on port ' + port);
-
-});
+//run api
+app.listen(port, () => {console.log('Listening on port ' + port);});
