@@ -8,32 +8,36 @@ export default function NewUser({setRegister}){
     const [username, setUsername] = useState("");
     const [pending, setPending] = useState("");
 
-    const handleSubmit = (e) => {
-        e.preventDefault();
-        setPending(true);
-        if(username != "" && password != "" && password == passValid){
-            var success = newUserRequest();
-        }
-        setPending(false);
-        if(success){
-            setRegister(false);
-        }
-    };
-
     async function newUserRequest(){
-        let success = false;
         const userData = {"username" : username, "password" : btoa(password)};
-        await fetch('/register/', {
+        return await fetch('/register/', {
             method: 'POST',
             headers: {'Content-type' : 'application/json'},
             body: JSON.stringify({userData})
         })
         .then((response) => response.json())
         .then((result) => {
-        console.log(result);
-        return(result.success);
+            console.log(result);
+            return(result.success);
         });
     }
+
+
+    const handleSubmit = async (e) => {
+        e.preventDefault();
+        setPending(true);
+        var success = false;
+        if(username != "" && password != "" && password == passValid){
+            success = await newUserRequest();
+        }
+        setPending(false);
+        console.log(success);
+        if(success){
+            alert("User Created Successfully");
+            setRegister(false);
+        }
+        else{alert("User already exists");}
+    };
 
     return(
         <div className='formContainer'>
