@@ -23,11 +23,23 @@ app.post('/blueprint', (req, res) => {
   res.send();
 });
 
+
+//Existing user data request
 app.post('/login', (req, res) =>{
   console.log(req.body);
-  res.send()
+  const newUser = (req.body.userData);
+  //Check if username exists already
+  for(i=0; i<users.length; i++){
+    if (users[i].username == newUser.username){
+      return res.json({ success: true, message: "User Data Found", user: users[i], blueprint: blueprint});
+    }
+  }
+  //Else send error
+  return res.json({ success: false, message: "User Not Found", user: null, blueprint: null});
 });
 
+
+//Adding new user
 app.post('/register', (req, res) =>{
   const newUser = (req.body.userData);
 
