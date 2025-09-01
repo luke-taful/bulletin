@@ -31,7 +31,7 @@ export default function Login(){
             setUser(response.user);
             console.log(response);
         }
-        else{setErrorList(["User not found"])}
+        else{setErrorList([response.message])}
     };
 
     const handleSubmit = (e) => {
@@ -43,7 +43,6 @@ export default function Login(){
         }
         if(tempFlags.length == 0){loginRequest()}
         else{setErrorList(tempFlags.map((flag, index) => (<li key={index}>{flag}</li>)));}
-        console.log(user);
         setPending(false);
     }
 

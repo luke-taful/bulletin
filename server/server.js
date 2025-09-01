@@ -26,11 +26,13 @@ app.post('/blueprint', (req, res) => {
 
 //Existing user data request
 app.post('/login', (req, res) =>{
-  console.log(req.body);
-  const newUser = (req.body.userData);
+  const userLog = (req.body.userData);
   //Check if username exists already
   for(i=0; i<users.length; i++){
-    if (users[i].username == newUser.username){
+    if (users[i].username == userLog.username){
+      if(users[i].password != userLog.password){
+        return res.json({ success: false, message: "Incorrect Password", user: null, blueprint: null});
+      }
       return res.json({ success: true, message: "User Data Found", user: users[i], blueprint: blueprint});
     }
   }
