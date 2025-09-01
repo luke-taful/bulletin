@@ -1,10 +1,11 @@
 "use client"
+import {Editor} from "./Editor"
+import {Login} from "./Login"
 import React, {useEffect, useState} from "react";
-import { Editor } from "./Editor"
 import Draggable from 'react-draggable';
 
 export default function Board(){
-
+  const [userInfo, setUserInfo] = useState();
   const [blueprint, setBlueprint] = useState();
   const [loading, setLoading] = useState(true);
   const [editing, setEditing] = useState(false);
@@ -19,17 +20,25 @@ export default function Board(){
       });
   }, []);
 
+
+  //Potential Renders
   if (loading){return <p>Loading...</p>};
+  if(userInfo == null){
+    return(
+      <div>
+        <Login setUserInfo={setUserInfo}/>
+      </div>
+    );
+  };
   if(editing){
     return(    
       <div>
-        <Editor blueprint={blueprint} setBlueprint={setBlueprint} setEditing={setEditing} /> ;
+        <Editor blueprint={blueprint} setBlueprint={setBlueprint} setEditing={setEditing} />
       </div>
     );
   };
 
   const handleClick = () => {setEditing(true)};
-
   return(
     <div id="board">
       <button onClick={handleClick}>Edit</button>
@@ -37,6 +46,8 @@ export default function Board(){
     </div>
   )
 }
+
+
 
 
 function CreateElements(items){

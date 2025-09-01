@@ -3,14 +3,15 @@ import React, { useState } from 'react';
 import "../style/style.css";
 import NewUser from './NewUser';
 
-export default function Login(){
+export function Login({setUserInfo}){
     const [password, setPassword] = useState("");
     const [username, setUsername] = useState("");
     const [pending, setPending] = useState(false);
     const [register, setRegister] = useState(false);
     const [errorList, setErrorList] = useState([])
-    const [user, setUser] = useState({});
     
+
+    //API call
     async function getUserData(){
         const userData = {"username" : username, "password" : btoa(password)};
         return await fetch('/login/', {
@@ -24,16 +25,17 @@ export default function Login(){
         });
     }
 
+    //Handle API response
     const loginRequest = async () => {
         const response = await getUserData();
         setPending(false);
         if(response.success){
-            setUser(response.user);
-            console.log(response);
+            setUserInfo(response);
         }
         else{setErrorList([response.message])}
     };
 
+    //Handle form submit
     const handleSubmit = (e) => {
         e.preventDefault();
         setPending(true);
