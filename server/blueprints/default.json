@@ -1,1 +1,1 @@
-[{"id":0,"type":"text","text":"SERVER LOAD","color":"green","font":"impact","textSize":"xxx-large","xpos":350,"ypos":510}, {"id":2,"type":"img","src":"./globe.svg","text":"Image Unavailible","size":100,"xpos":1025,"ypos":100}]
+[{"id":0,"type":"text","text":"SERVER LOAD","color":"green","font":"impact","textSize":"xxx-large","xpos":350,"ypos":510}, {"id":1,"type":"img","src":"./globe.svg","text":"Image Unavailible","size":100,"xpos":1025,"ypos":100}]

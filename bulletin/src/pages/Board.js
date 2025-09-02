@@ -1,35 +1,27 @@
 "use client"
 import {Editor} from "./Editor"
-import {Login} from "./Login"
-import React, {useEffect, useState} from "react";
+import React, {useState, useRef} from "react";
 import Draggable from 'react-draggable';
 
-export default function Board(){
-  const [userInfo, setUserInfo] = useState();
-  const [blueprint, setBlueprint] = useState();
-  const [loading, setLoading] = useState(true);
+export default function Board({userInfo}){
+  const [blueprint, setBlueprint] = useState(userInfo.blueprint);
+  const [loading, setLoading] = useState(false);
   const [editing, setEditing] = useState(false);
 
-  useEffect(() => {
+  // useEffect(() => {
 
-   fetch('/blueprint/')
-      .then((response) => response.json())
-      .then((data) => {
-        setBlueprint(data);
-        setLoading(false);
-      });
-  }, []);
+  //  fetch('/blueprint/')
+  //     .then((response) => response.json())
+  //     .then((data) => {
+  //       setBlueprint(data);
+  //       setLoading(false);
+  //     });
+  // }, []);
 
+  console.log(blueprint)
 
   //Potential Renders
   if (loading){return <p>Loading...</p>};
-  if(userInfo == null){
-    return(
-      <div>
-        <Login setUserInfo={setUserInfo}/>
-      </div>
-    );
-  };
   if(editing){
     return(    
       <div>
@@ -37,7 +29,6 @@ export default function Board(){
       </div>
     );
   };
-
   const handleClick = () => {setEditing(true)};
   return(
     <div id="board">
@@ -46,9 +37,6 @@ export default function Board(){
     </div>
   )
 }
-
-
-
 
 function CreateElements(items){
   //Create each custom element from the json blueprint and store in a list.
@@ -74,22 +62,24 @@ function CreateElements(items){
 
 function MakeText(items){   //Handles creating a new element with text 
   return(
-  <Draggable
-    disabled={true}
-    defaultPosition={{ x: items.xpos, y: items.ypos }}>
-    <div key={items.id} style={{width:"fit-content", height:"fit-content"}}>
-      <p id={items.id} style={{color: items.color, fontFamily: items.font, fontSize: items.textSize}}> {items.text} </p>
-    </div>
-  </Draggable>
-  )}
+      <Draggable
+        disabled={true}
+        key={items.id}
+        defaultPosition={{ x: items.xpos, y: items.ypos }}>
+        <div key={items.id} style={{width:"fit-content", height:"fit-content"}}>
+          <p id={items.id} style={{color: items.color, fontFamily: items.font, fontSize: items.textSize}}> {items.text} </p>
+        </div>
+      </Draggable>
+  )};
 
 function MakeImg(items){    //Handles creating a new element with an image
   return(
-  <Draggable
-    disabled={true}
-    defaultPosition={{ x: items.xpos, y: items.ypos }}>
-    <div key={items.id} style={{width:"fit-content", height:"fit-content"}}>
-      <img id={items.id} src={items.src} alt={items.text} width={items.size} height={items.size} draggable="false"></img>
-    </div>
-  </Draggable>
+      <Draggable
+        disabled={true}
+        key={items.id}
+        defaultPosition={{ x: items.xpos, y: items.ypos }}>
+        <div key={items.id} style={{width:"fit-content", height:"fit-content"}}>
+          <img id={items.id} src={items.src} alt={items.text} width={items.size} height={items.size} draggable="false"></img>
+        </div>
+      </Draggable>
 )}
