@@ -1,4 +1,5 @@
 "use client"
+import "../style/style.css";
 import {Editor} from "./Editor"
 import React, {useState, useRef} from "react";
 import Draggable from 'react-draggable';

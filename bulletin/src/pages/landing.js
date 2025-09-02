@@ -9,13 +9,6 @@ import React, {useState} from "react";
 export default function Landing(){
     const [userInfo, setUserInfo] = useState();
 
-    console.log(userInfo);
-    if(userInfo){
-        return(
-            <Board userInfo={userInfo}/>
-        )
-    }
-    return(
-        <Login setUserInfo={setUserInfo}/>
-    )
+    if(userInfo){return <Board userInfo={userInfo}/>}
+    return <Login setUserInfo={setUserInfo}/>
 }

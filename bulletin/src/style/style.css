@@ -38,6 +38,7 @@ button{
   float: right;
   clear: right;
   margin-top: 10px;
+  margin-right: 10px;
   color: #6B7280;
   background-color: #111827;
   border: 1px solid transparent;
@@ -132,3 +133,6 @@ h4{
    align-items: center;
 }
 
+#board{
+  width: 100%;
+}
