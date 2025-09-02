@@ -9,19 +9,37 @@ export default function NewUser({setRegister}){
     const [pending, setPending] = useState("");
     const [errorList, setErrorList] = useState([]);
 
+    //API call
     async function newUserRequest(){
         const userData = {"username" : username, "password" : btoa(password)};
-        return await fetch('/register/', {
-            method: 'POST',
-            headers: {'Content-type' : 'application/json'},
-            body: JSON.stringify({userData})
-        })
-        .then((response) => response.json())
-        .then((result) => {
-            return(result.success);
-        });
+        try{
+            return await fetch('/register/', {
+                method: 'POST',
+                headers: {'Content-type' : 'application/json'},
+                body: JSON.stringify({userData})
+            })
+            .then((response) => response.json())
+            .then((result) => {
+                return(result);
+            });
+        }catch(error){return {success: false, message: "Server Error"}};
     }
 
+    //Handle API response
+    const handleNewUser = async () => {
+        setErrorList("");
+        setPending(true);
+        
+        const result = await newUserRequest();
+        setPending(false);
+        if(result.success){
+            alert("User Created Successfully");
+            setRegister(false);
+        }
+        else{setErrorList([result.message]);}
+    };
+
+    //Handle form submit
     const handleSubmit = (e) => {
         e.preventDefault();
         const tempFlags = [];
@@ -37,20 +55,6 @@ export default function NewUser({setRegister}){
 
         else{setErrorList(tempFlags.map((flag, index) => (<li key={index}>{flag}</li>)));}
     }
-
-    const handleNewUser = async () => {
-        setErrorList("");
-        setPending(true);
-        var success = false;
-        
-        success = await newUserRequest();
-        setPending(false);
-        if(success){
-            alert("User Created Successfully");
-            setRegister(false);
-        }
-        else{setErrorList(["User already exists"]);}
-    };
 
     return(
         <div className='formContainer'>

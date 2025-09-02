@@ -1,17 +1,15 @@
-import Image from "next/image";
 import "../style/style.css";
-import layout from "./layout.js";
-import Board from "../pages/Board";
-import Login from "../pages/Login";
+import Layout from "./layout.js";
+import Landing from "../pages/landing.js"
 
 
 export default function Home() {
 
   return (
     <div className="page">
-      <layout>
-        <Login/>
-      </layout>
+      <Layout>
+        <Landing/>
+      </Layout>
     </div>
   );
 }

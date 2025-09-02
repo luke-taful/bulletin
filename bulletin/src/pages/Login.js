@@ -3,7 +3,7 @@ import React, { useState } from 'react';
 import "../style/style.css";
 import NewUser from './NewUser';
 
-export function Login({setUserInfo}){
+export default function Login({setUserInfo}){
     const [password, setPassword] = useState("");
     const [username, setUsername] = useState("");
     const [pending, setPending] = useState(false);
@@ -14,15 +14,17 @@ export function Login({setUserInfo}){
     //API call
     async function getUserData(){
         const userData = {"username" : username, "password" : btoa(password)};
-        return await fetch('/login/', {
-            method: 'POST',
-            headers: {'Content-type' : 'application/json'},
-            body: JSON.stringify({userData})
-        })
-        .then((response) => response.json())
-        .then((result) => {
-            return(result);
-        });
+        try{
+            return await fetch('/login/', {
+                method: 'POST',
+                headers: {'Content-type' : 'application/json'},
+                body: JSON.stringify({userData})
+            })
+            .then((response) => response.json())
+            .then((result) => {
+                return(result);
+            });
+        }catch(error){return {success: false, message: "Server Error"}};
     }
 
     //Handle API response
