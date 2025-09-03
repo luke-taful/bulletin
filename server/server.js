@@ -1,15 +1,14 @@
 const Express = require("express");
-var blueprint = require("./blueprints/default.json");
-var users = require("./users.json");
 const fs = require("fs");
+const path = require("path");
 
 const app = Express();
 app.use(Express.json());
 const port = 5000;
 
-app.get('/blueprint', (req, res) => {
-  res.send(blueprint);
-});
+// app.get('/blueprint', (req, res) => {
+//   res.send(blueprint);
+// });
 
 app.post('/blueprint', (req, res) => {
   blueprint = (req.body.blueprint);
@@ -22,24 +21,6 @@ app.post('/blueprint', (req, res) => {
   });
   res.send();
 });
-
-
-//Existing user data request
-app.post('/login', (req, res) =>{
-  const userLog = (req.body.userData);
-  //Check if username exists already
-  for(i=0; i<users.length; i++){
-    if (users[i].username == userLog.username){
-      if(users[i].password != userLog.password){
-        return res.json({ success: false, message: "Incorrect Password", user: null, blueprint: null});
-      }
-      return res.json({ success: true, message: "User Data Found", user: users[i], blueprint: blueprint});
-    }
-  }
-  //Else send error
-  return res.json({ success: false, message: "User Not Found", user: null, blueprint: null});
-});
-
 
 //Adding new user
 app.post('/register', (req, res) =>{
@@ -62,6 +43,27 @@ app.post('/register', (req, res) =>{
     }
   });
   res.json({ success: true, message: "User registered successfully"});
+});
+
+//Existing user data request
+app.post('/login', (req, res) =>{
+  const userReq = (req.body.userData);
+  const filePath = path.join(__dirname, "users", `${userReq.username}.json`);
+  // If user doesnt exist
+  if (!fs.existsSync(filePath)) {return res.json({ success: false, message: "User Not Found", user: null, blueprint: null})};
+  // Read user data
+  try {
+    const userResponse = JSON.parse(fs.readFileSync(filePath, "utf-8"));
+        console.log(userResponse);
+    //Check password
+    if(userResponse.user.password != userReq.password){return res.json({ success: false, message: "Incorrect Password", user: null, blueprint: null})};
+    //Return if data found
+    return res.json({ success: true, message: "User Data Found", user: userResponse.user, blueprint: userResponse.blueprint});
+  }
+  //Else Return Error
+  catch(error){
+    console.log(error);
+    return res.json({ success: false, message: "Error fetching user data", user: null, blueprint: null})}
 });
 
 //run api
