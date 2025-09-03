@@ -24,26 +24,32 @@ app.post('/blueprint', (req, res) => {
 
 //Adding new user
 app.post('/register', (req, res) =>{
-  const newUser = (req.body.userData);
+  const newUserReq = (req.body.userData);
+  const filePath = path.join(__dirname, "users", `${newUserReq.username}.json`);
 
-  //Check if username exists already
-  for(i=0; i<users.length; i++){
-    if (users[i].username == newUser.username){
-      return res.json({ success: false, message: "User already exists" });
-    }
-  }
+  //Check if user exists already
+  if (fs.existsSync(filePath)){return res.json({ success: false, message: "User already exists"})};
 
-  //Otherwise add user data to the store
-  users.push(newUser);
-  const usersStr = JSON.stringify(users);
-  fs.writeFile("users.json", usersStr, (error) => {
-    if (error) {
-      console.error(error);
-      throw error;
-    }
+  //Attempt to create new user file
+  const newUserDefault = {
+    "user": {
+      "username":newUserReq.username,
+      "password":newUserReq.password
+    },
+    "blueprint": [
+      {"id":0,"type":"text","text":"No existing board found","color":"green","font":"impact","textSize":"xxx-large","xpos":350,"ypos":510}, 
+      {"id":1,"type":"text","text":"Click the edit button to get started!","color":"green","font":"impact","textSize":"xxx-large","xpos":350,"ypos":450}
+    ]
+  };
+  const nsString = JSON.stringify(newUserDefault, null, 2);
+
+  fs.writeFile(filePath, nsString, (err) => {
+    if(err){return res.json({ success: false, message: "Error creating user"})}
+    else {return res.json({ success: true, message: `User registered successfully`})}
   });
-  res.json({ success: true, message: "User registered successfully"});
 });
+
+
 
 //Existing user data request
 app.post('/login', (req, res) =>{
@@ -54,7 +60,6 @@ app.post('/login', (req, res) =>{
   // Read user data
   try {
     const userResponse = JSON.parse(fs.readFileSync(filePath, "utf-8"));
-        console.log(userResponse);
     //Check password
     if(userResponse.user.password != userReq.password){return res.json({ success: false, message: "Incorrect Password", user: null, blueprint: null})};
     //Return if data found
