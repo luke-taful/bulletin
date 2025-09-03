@@ -91,20 +91,20 @@ export function Editor({ blueprint, setBlueprint, setEditing }){
     </Draggable>
   )}
 
-function MakeImg({items}){    //Handles creating a new element with an image
-  const nodeRef = useRef(null);
-  return(
-  <Draggable
-    nodeRef={nodeRef}
-    grid={[25, 25]}
-    scale={1}
-    onStop={handleStop}
-    defaultPosition={{ x: items.xpos, y: items.ypos }}>
-    <div ref={nodeRef} style={{width:"fit-content", height:"fit-content", cursor:"crosshair"}}>
-      <img id={items.id} src={items.src} alt={items.text} width={items.size} height={items.size} draggable="false"></img>
-    </div>
-  </Draggable>
-)}
+  function MakeImg({items}){    //Handles creating a new element with an image
+    const nodeRef = useRef(null);
+    return(
+    <Draggable
+      nodeRef={nodeRef}
+      grid={[25, 25]}
+      scale={1}
+      onStop={handleStop}
+      defaultPosition={{ x: items.xpos, y: items.ypos }}>
+      <div ref={nodeRef} style={{width:"fit-content", height:"fit-content", cursor:"crosshair"}}>
+        <img id={items.id} src={items.src} alt={items.text} width={items.size} height={items.size} draggable="false"></img>
+      </div>
+    </Draggable>
+  )}
 
   return(
     <div id="board">
