@@ -1,5 +1,5 @@
 import "../style/style.css";
-import Landing from "../pages/landing.js";
+import Landing from "../pages/Landing.js";
 
 
 export default function Home() {

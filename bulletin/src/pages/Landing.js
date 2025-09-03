@@ -1,6 +1,6 @@
 "use client"
-import Board from "../pages/Board";
-import Login from "../pages/Login";
+import Board from "./Board";
+import Login from "./Login";
 import "../style/style.css";
 import React, {useState} from "react";
 

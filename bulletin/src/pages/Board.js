@@ -10,13 +10,7 @@ export default function Board({userInfo}){
 
   const handleClick = () => {setEditing(true)};
 
-  if(editing){
-    return(    
-      <div>
-        <Editor blueprint={blueprint} setBlueprint={setBlueprint} setEditing={setEditing} />
-      </div>
-    );
-  };
+  if(editing){return <Editor blueprint={blueprint} setBlueprint={setBlueprint} setEditing={setEditing}/>};
 
   return(
     <div id="board">

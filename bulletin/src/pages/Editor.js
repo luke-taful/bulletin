@@ -1,4 +1,4 @@
-import React, {useState} from 'react';
+import React, {useState, useRef} from 'react';
 import Draggable from 'react-draggable';
 import Popup from 'reactjs-popup';
 import '../style/style.css';
@@ -72,14 +72,11 @@ export function Editor({ blueprint, setBlueprint, setEditing }){
   function CreateElements(items){
   //Create each custom element from the json blueprint and store in a list.
   const elements = items.map((item) => {
-    var tempElements = null;
     if(item.type == "text"){
-        tempElements = MakeText(item)}
-      if(item.type == "img"){
-        tempElements = MakeImg(item)}
-    return tempElements;
+      return <MakeText items={item} key={item.id}/>}
+    if(item.type == "img"){
+      return <MakeImg items={item} key={item.id}/>}
   })
-  //Wrap in another div, as react can only return 1 element per function.
   return(
     <div id="loadContainer">
       {elements}
@@ -87,27 +84,31 @@ export function Editor({ blueprint, setBlueprint, setEditing }){
   );
 }
 
-function MakeText(items){   //Handles creating a new element with text 
+function MakeText({items}){   //Handles creating a new element with text 
+  const nodeRef = useRef(null);
   return(
   <Draggable
+    nodeRef={nodeRef}
     grid={[25, 25]}
     scale={1}
     onStop={handleStop}
     defaultPosition={{ x: items.xpos, y: items.ypos }}>
-    <div key={items.id} style={{width:"fit-content", height:"fit-content", cursor:"crosshair"}}>
+    <div ref={nodeRef} style={{width:"fit-content", height:"fit-content", cursor:"crosshair"}}>
       <p id={items.id} style={{color: items.color, fontFamily: items.font, fontSize: items.textSize}}> {items.text} </p>
     </div>
   </Draggable>
   )}
 
-function MakeImg(items){    //Handles creating a new element with an image
+function MakeImg({items}){    //Handles creating a new element with an image
+  const nodeRef = useRef(null);
   return(
   <Draggable
+    nodeRef={nodeRef}
     grid={[25, 25]}
     scale={1}
     onStop={handleStop}
     defaultPosition={{ x: items.xpos, y: items.ypos }}>
-    <div key={items.id} style={{width:"fit-content", height:"fit-content", cursor:"crosshair"}}>
+    <div ref={nodeRef} style={{width:"fit-content", height:"fit-content", cursor:"crosshair"}}>
       <img id={items.id} src={items.src} alt={items.text} width={items.size} height={items.size} draggable="false"></img>
     </div>
   </Draggable>
