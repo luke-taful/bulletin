@@ -9,7 +9,6 @@ export function Editor({ blueprint, setBlueprint, setEditing }){
   const [textIn, setTextIn] = useState("");
   const [imgIn, setImgIn] = useState("");
 
-
   //Manage adding new Elements
   const addText = () => {
     setBlueprint([ ...blueprint,{
@@ -38,9 +37,7 @@ export function Editor({ blueprint, setBlueprint, setEditing }){
 
   //Preserving blueprint
   async function SaveState(){
-    
     let success = false;
-
     await fetch('/blueprint/', {
       method: 'POST',
       headers: {'Content-type' : 'application/json'},
@@ -50,14 +47,9 @@ export function Editor({ blueprint, setBlueprint, setEditing }){
     .then((result) => {
       success = result.ok;
     });
-
-    if (success == true){
-      setEditing(false);
-    }
-    else{
-      alert("Error when saving, please try again.");
-    }
-  }
+    if (success == true){setEditing(false);}
+    else{alert("Error when saving, please try again.");}
+  };
 
   //Draggable Position Handling
   const handleStop = (event, dragElement) => {
@@ -70,33 +62,33 @@ export function Editor({ blueprint, setBlueprint, setEditing }){
   };
 
   function CreateElements(items){
-  //Create each custom element from the json blueprint and store in a list.
-  const elements = items.map((item) => {
-    if(item.type == "text"){
-      return <MakeText items={item} key={item.id}/>}
-    if(item.type == "img"){
-      return <MakeImg items={item} key={item.id}/>}
-  })
-  return(
-    <div id="loadContainer">
-      {elements}
-    </div>
-  );
-}
+    //Create each custom element from the json blueprint and store in a list.
+    const elements = items.map((item) => {
+      if(item.type == "text"){
+        return <MakeText items={item} key={item.id}/>}
+      if(item.type == "img"){
+        return <MakeImg items={item} key={item.id}/>}
+    })
+    return(
+      <div id="loadContainer">
+        {elements}
+      </div>
+    );
+  }
 
-function MakeText({items}){   //Handles creating a new element with text 
-  const nodeRef = useRef(null);
-  return(
-  <Draggable
-    nodeRef={nodeRef}
-    grid={[25, 25]}
-    scale={1}
-    onStop={handleStop}
-    defaultPosition={{ x: items.xpos, y: items.ypos }}>
-    <div ref={nodeRef} style={{width:"fit-content", height:"fit-content", cursor:"crosshair"}}>
-      <p id={items.id} style={{color: items.color, fontFamily: items.font, fontSize: items.textSize}}> {items.text} </p>
-    </div>
-  </Draggable>
+  function MakeText({items}){   //Handles creating a new element with text 
+    const nodeRef = useRef(null);
+    return(
+    <Draggable
+      nodeRef={nodeRef}
+      grid={[25, 25]}
+      scale={1}
+      onStop={handleStop}
+      defaultPosition={{ x: items.xpos, y: items.ypos }}>
+      <div ref={nodeRef} style={{width:"fit-content", height:"fit-content", cursor:"crosshair"}}>
+        <p id={items.id} style={{color: items.color, fontFamily: items.font, fontSize: items.textSize}}> {items.text} </p>
+      </div>
+    </Draggable>
   )}
 
 function MakeImg({items}){    //Handles creating a new element with an image
