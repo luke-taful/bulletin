@@ -1,1 +1,46 @@
-{"user": {"username":"def","password":"cGFzcw=="}, "blueprint": [{"id":0,"type":"text","text":"No existing board found","color":"green","font":"impact","textSize":"xxx-large","xpos":350,"ypos":510}, {"id":1,"type":"text","text":"Click the edit button to get started!","color":"green","font":"impact","textSize":"xxx-large","xpos":350,"ypos":450}, {"id":2,"type":"img","src":"./globe.svg","text":"Image Unavailible","size":100,"xpos":1025,"ypos":100}]}
+{
+  "user": {
+    "username": "def",
+    "password": "cGFzcw=="
+  },
+  "blueprint": [
+    {
+      "id": 0,
+      "type": "text",
+      "text": "No existing board found",
+      "color": "green",
+      "font": "impact",
+      "textSize": "xxx-large",
+      "xpos": 350,
+      "ypos": 510
+    },
+    {
+      "id": 1,
+      "type": "text",
+      "text": "Click the edit button to get started!",
+      "color": "green",
+      "font": "impact",
+      "textSize": "xxx-large",
+      "xpos": 350,
+      "ypos": 450
+    },
+    {
+      "id": 2,
+      "type": "text",
+      "text": "blahblahblah",
+      "color": "black",
+      "font": "Arial, Helvetica, sans-serif",
+      "textSize": "smaller",
+      "xpos": 500,
+      "ypos": 500
+    },
+    {
+      "id": 3,
+      "type": "img",
+      "src": "blob:http://localhost:3000/e12deff3-b3fe-45e7-b56a-6829c61963af",
+      "text": "Image Unavailable",
+      "xpos": 900,
+      "ypos": -225
+    }
+  ]
+}

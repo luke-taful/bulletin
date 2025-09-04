@@ -6,20 +6,26 @@ const app = Express();
 app.use(Express.json());
 const port = 5000;
 
-// app.get('/blueprint', (req, res) => {
-//   res.send(blueprint);
-// });
-
+//Blueprint update
 app.post('/blueprint', (req, res) => {
   blueprint = (req.body.blueprint);
-  const newBP = JSON.stringify(blueprint);
-  fs.writeFile("blueprint.json", newBP, (error) => {
-    if (error) {
-      console.error(error);
-      throw error;
-    }
-  });
-  res.send();
+  user = (req.headers.username);
+  const filePath = path.join(__dirname, "users", `${user}.json`);
+  if (!fs.existsSync(filePath)){return res.json({ success: false, message: "There was an error retrieving user info"})};
+
+  //Read existing user file
+  try {
+    const currentData = JSON.parse(fs.readFileSync(filePath, "utf-8"));
+    currentData.blueprint = blueprint;
+    console.log(currentData.blueprint);
+    //Write modified object data to user file
+    const newBP = JSON.stringify(currentData, null, 2);
+    fs.writeFile(filePath, newBP, (err) => {
+      if(err){return res.json({ success: false, message: "There was an error saving your board"})}
+      else {return res.json({ success: true, message: `Board update successful`})}
+    });
+
+  }catch(error){return res.json({ success: false, message: "There was an error retrieving user info"})};
 });
 
 //Adding new user

@@ -3,7 +3,7 @@ import Draggable from 'react-draggable';
 import Popup from 'reactjs-popup';
 import '../style/style.css';
 
-export function Editor({ blueprint, setBlueprint, setEditing }){
+export function Editor({ blueprint, setBlueprint, setEditing, username}){
   
   const [idNum, setIdNum] = useState(blueprint.length)
   const [textIn, setTextIn] = useState("");
@@ -28,7 +28,7 @@ export function Editor({ blueprint, setBlueprint, setEditing }){
       id:idNum,
       type:"img",
       src:URL.createObjectURL(imgIn),
-      text:"Image Unavailible",
+      text:"Image Unavailable",
       xpos:500,
       ypos:500
     }]);
@@ -36,19 +36,24 @@ export function Editor({ blueprint, setBlueprint, setEditing }){
   }
 
   //Preserving blueprint
-  async function SaveState(){
-    let success = false;
-    await fetch('/blueprint/', {
-      method: 'POST',
-      headers: {'Content-type' : 'application/json'},
-      body: JSON.stringify({blueprint})
-    })
-    .then((response) => response)
-    .then((result) => {
-      success = result.ok;
-    });
-    if (success == true){setEditing(false);}
-    else{alert("Error when saving, please try again.");}
+  async function apiUpdate(){
+    try{
+      return await fetch('/blueprint/', {
+        method: 'POST',
+        headers: {'Content-type' : 'application/json', 'username': username},
+        body: JSON.stringify({blueprint})
+      })
+      .then((response) => response.json())
+      .then((result) => {
+        return(result);
+      });
+    }catch(error){return {success: false, message: "Server Error"}};
+  };
+
+  const SaveState = async () => {
+    const result = await apiUpdate();
+    if(result.success){setEditing(false);}
+    else{alert(result.message);}
   };
 
   //Draggable Position Handling
