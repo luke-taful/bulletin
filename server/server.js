@@ -9,8 +9,8 @@ const port = 5000;
 
 //Blueprint update
 app.post('/blueprint', (req, res) => {
-  blueprint = (req.body.blueprint);
-  user = (req.headers.username);
+  const blueprint = (req.body.blueprint);
+  const user = (req.headers.username);
   const filePath = path.join(__dirname, "users", `${user}.json`);
   if (!fs.existsSync(filePath)){return res.json({ success: false, message: "There was an error retrieving user info"})};
 
@@ -28,12 +28,15 @@ app.post('/blueprint', (req, res) => {
   }catch(error){return res.json({ success: false, message: "There was an error retrieving user info"})};
 });
 
+//Recieving image data when they are added to a user board
 app.post('/images',
   bodyParser.raw({ type: ["image/jpeg", "image/png"], limit: "5mb" }),
   (req, res) => {
+    const user = req.headers.username;
+    const filePath = path.join(__dirname, "images", `${user +"$"+ Date.now()}.jpeg`);
     try{
       console.log(req.body);
-      fs.writeFile("image.jpeg", req.body, (error) => {
+      fs.writeFile(filePath, req.body, (error) => {
         if (error) {
           return res.json({ success: false, message: "There was an error saving image"})
         }
