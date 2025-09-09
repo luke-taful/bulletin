@@ -13,6 +13,10 @@ const nextConfig = {
       {
         source: '/register',
         destination: 'http://localhost:5000/register',
+      },
+      {
+        source: '/images',
+        destination: 'http://localhost:5000/images'
       }
     ]
   }

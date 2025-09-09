@@ -1,6 +1,7 @@
 const Express = require("express");
 const fs = require("fs");
 const path = require("path");
+const bodyParser = require("body-parser");
 
 const app = Express();
 app.use(Express.json());
@@ -17,7 +18,6 @@ app.post('/blueprint', (req, res) => {
   try {
     const currentData = JSON.parse(fs.readFileSync(filePath, "utf-8"));
     currentData.blueprint = blueprint;
-    console.log(currentData.blueprint);
     //Write modified object data to user file
     const newBP = JSON.stringify(currentData, null, 2);
     fs.writeFile(filePath, newBP, (err) => {
@@ -27,6 +27,23 @@ app.post('/blueprint', (req, res) => {
 
   }catch(error){return res.json({ success: false, message: "There was an error retrieving user info"})};
 });
+
+app.post('/images',
+  bodyParser.raw({ type: ["image/jpeg", "image/png"], limit: "5mb" }),
+  (req, res) => {
+    try{
+      console.log(req.body);
+      fs.writeFile("image.jpeg", req.body, (error) => {
+        if (error) {
+          return res.json({ success: false, message: "There was an error saving image"})
+        }
+      });
+      return res.json({ success: true, message: `Image upload successful`});
+    }catch(error){return res.json({ success: false, message: "There was an error saving image"})}
+});
+
+
+
 
 //Adding new user
 app.post('/register', (req, res) =>{
@@ -56,7 +73,6 @@ app.post('/register', (req, res) =>{
 });
 
 
-
 //Existing user data request
 app.post('/login', (req, res) =>{
   const userReq = (req.body.userData);
@@ -77,5 +93,6 @@ app.post('/login', (req, res) =>{
     return res.json({ success: false, message: "Error fetching user data", user: null, blueprint: null})}
 });
 
-//run api
+
+//run server
 app.listen(port, () => {console.log('Listening on port ' + port);});

@@ -23,6 +23,7 @@ export function Editor({ blueprint, setBlueprint, setEditing, username}){
     }]);
     setIdNum(idNum + 1);
   }
+
   const AddImage = () => {
     setBlueprint([ ...blueprint,{
       id:idNum,
@@ -33,7 +34,27 @@ export function Editor({ blueprint, setBlueprint, setEditing, username}){
       ypos:500
     }]);
     setIdNum(idNum + 1);
+
+    ImagePost();
   }
+
+
+  const ImagePost = async () => {
+    try{
+      response = await fetch('/images/', {
+        method: 'POST',
+        headers: {'Content-type' : 'image/jpeg', 'username': username},
+        body: imgIn
+      })
+      .then((response) => response.json())
+      .then((result) => {
+        return(result);
+      });
+    }catch(error){return {success: false, message: "Image upload error"}};
+    console.log(response);
+  };
+
+
 
   //Preserving blueprint
   async function apiUpdate(){
