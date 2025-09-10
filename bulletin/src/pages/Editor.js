@@ -25,25 +25,25 @@ export function Editor({ blueprint, setBlueprint, setEditing, username}){
   }
 
   const AddImage = () => {
+    const imgName = username + "$" + Date.now() + ".jpeg";
     setBlueprint([ ...blueprint,{
       id:idNum,
       type:"img",
-      src:URL.createObjectURL(imgIn),
+      src:"http://localhost:5000/uploads/" + imgName,
       text:"Image Unavailable",
       xpos:500,
       ypos:500
     }]);
     setIdNum(idNum + 1);
-
-    ImagePost();
+    ImagePost(imgName);
   }
 
 
-  const ImagePost = async () => {
+  const ImagePost = async (imgName) => {
     try{
       response = await fetch('/images/', {
         method: 'POST',
-        headers: {'Content-type' : 'image/jpeg', 'username': username},
+        headers: {'Content-type' : 'image/jpeg', 'imgname': imgName},
         body: imgIn
       })
       .then((response) => response.json())

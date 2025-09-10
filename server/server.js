@@ -2,9 +2,15 @@ const Express = require("express");
 const fs = require("fs");
 const path = require("path");
 const bodyParser = require("body-parser");
+const  cors = require("cors");
 
 const app = Express();
 app.use(Express.json());
+
+app.use(cors({
+  origin: "http://localhost:3000"  // React dev server
+}));
+app.use("/uploads", Express.static(path.join(__dirname, "uploads")));
 const port = 5000;
 
 //Blueprint update
@@ -32,8 +38,9 @@ app.post('/blueprint', (req, res) => {
 app.post('/images',
   bodyParser.raw({ type: ["image/jpeg", "image/png"], limit: "5mb" }),
   (req, res) => {
-    const user = req.headers.username;
-    const filePath = path.join(__dirname, "images", `${user +"$"+ Date.now()}.jpeg`);
+    const imgName = req.headers.imgname;
+    console.log(imgName);
+    const filePath = path.join(__dirname, "uploads", imgName); 
     try{
       console.log(req.body);
       fs.writeFile(filePath, req.body, (error) => {
