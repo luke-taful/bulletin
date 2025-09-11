@@ -4,8 +4,8 @@ import Popup from 'reactjs-popup';
 import '../style/style.css';
 
 export function Editor({ blueprint, setBlueprint, setEditing, username}){
-  
-  const [idNum, setIdNum] = useState(blueprint.length)
+  // const [blueprint, setBlueprint] = useState(persistentBP);
+  const [idNum, setIdNum] = useState(blueprint.length);
   const [textIn, setTextIn] = useState("");
   const [imgIn, setImgIn] = useState("");
 
@@ -19,25 +19,26 @@ export function Editor({ blueprint, setBlueprint, setEditing, username}){
         font:"Arial, Helvetica, sans-serif",
         textSize:"smaller",
         xpos:500,
-        ypos:500
+        ypos:0
     }]);
     setIdNum(idNum + 1);
   }
 
-  const AddImage = () => {
+  const AddImage = async () => {
     const imgName = username + "$" + Date.now() + ".jpeg";
+    //Send image to backend
+    await ImagePost(imgName);
+    //Update blueprint with new url
     setBlueprint([ ...blueprint,{
       id:idNum,
       type:"img",
       src:"http://localhost:5000/uploads/" + imgName,
       text:"Image Unavailable",
       xpos:500,
-      ypos:500
+      ypos:0
     }]);
     setIdNum(idNum + 1);
-    ImagePost(imgName);
   }
-
 
   const ImagePost = async (imgName) => {
     try{
@@ -51,10 +52,7 @@ export function Editor({ blueprint, setBlueprint, setEditing, username}){
         return(result);
       });
     }catch(error){return {success: false, message: "Image upload error"}};
-    console.log(response);
   };
-
-
 
   //Preserving blueprint
   async function apiUpdate(){
