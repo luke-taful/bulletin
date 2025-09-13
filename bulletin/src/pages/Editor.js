@@ -77,7 +77,7 @@ export function Editor({ blueprint, setBlueprint, setEditing, username}){
 
   //Delete specific element by button press
   const handleDelete = (event) => {
-    console.log(event.target.id);
+    setBlueprint(blueprint.filter(item => item.id !== Number(event.target.id)));
   }
 
   //Draggable Position Handling
@@ -134,7 +134,7 @@ export function Editor({ blueprint, setBlueprint, setEditing, username}){
       defaultPosition={{ x: items.xpos, y: items.ypos }}>
       <div ref={nodeRef} style={{width:"fit-content", height:"fit-content", cursor:"crosshair"}}>
         <img id={items.id} className="userElement" src={items.src} alt={items.text} width={items.size} height={items.size} draggable="false"></img>
-        <button className="deleteButton" onClick={deleteElement}>X</button>
+        <button className="deleteButton" onClick={handleDelete}>X</button>
       </div>
     </Draggable>
   )}
