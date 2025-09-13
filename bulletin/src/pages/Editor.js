@@ -54,6 +54,12 @@ export function Editor({ blueprint, setBlueprint, setEditing, username}){
     }catch(error){return {success: false, message: "Image upload error"}};
   };
 
+  const SaveState = async () => {
+    const result = await apiUpdate();
+    if(result.success){setEditing(false);}
+    else{alert(result.message);}
+  };
+
   //Preserving blueprint
   async function apiUpdate(){
     try{
@@ -69,11 +75,9 @@ export function Editor({ blueprint, setBlueprint, setEditing, username}){
     }catch(error){return {success: false, message: "Server Error"}};
   };
 
-  const SaveState = async () => {
-    const result = await apiUpdate();
-    if(result.success){setEditing(false);}
-    else{alert(result.message);}
-  };
+  const deleteElement = (event) => {
+    console.log(event);
+  }
 
   //Draggable Position Handling
   const handleStop = (event, dragElement) => {
@@ -104,13 +108,15 @@ export function Editor({ blueprint, setBlueprint, setEditing, username}){
     const nodeRef = useRef(null);
     return(
     <Draggable
+      handle=".userElement"
       nodeRef={nodeRef}
       grid={[25, 25]}
       scale={1}
       onStop={handleStop}
       defaultPosition={{ x: items.xpos, y: items.ypos }}>
       <div ref={nodeRef} style={{width:"fit-content", height:"fit-content", cursor:"crosshair"}}>
-        <p id={items.id} style={{color: items.color, fontFamily: items.font, fontSize: items.textSize}}> {items.text} </p>
+        <p id={items.id} className="userElement" style={{color: items.color, fontFamily: items.font, fontSize: items.textSize}}> {items.text} </p>
+        <button className="deleteButton" onClick={deleteElement}>X</button>
       </div>
     </Draggable>
   )}
@@ -119,13 +125,15 @@ export function Editor({ blueprint, setBlueprint, setEditing, username}){
     const nodeRef = useRef(null);
     return(
     <Draggable
+      handle=".userElement"
       nodeRef={nodeRef}
       grid={[25, 25]}
       scale={1}
       onStop={handleStop}
       defaultPosition={{ x: items.xpos, y: items.ypos }}>
       <div ref={nodeRef} style={{width:"fit-content", height:"fit-content", cursor:"crosshair"}}>
-        <img id={items.id} src={items.src} alt={items.text} width={items.size} height={items.size} draggable="false"></img>
+        <img id={items.id} className="userElement" src={items.src} alt={items.text} width={items.size} height={items.size} draggable="false"></img>
+        <button className="deleteButton" onClick={deleteElement}>X</button>
       </div>
     </Draggable>
   )}
