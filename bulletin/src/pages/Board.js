@@ -5,18 +5,18 @@ import React, {useState, useRef} from "react";
 import Draggable from 'react-draggable';
 
 export default function Board({userInfo}){
-  const [blueprint, setBlueprint] = useState(userInfo.blueprint);
+  const [boardInfo, setBoardInfo] = useState(userInfo.boardinfo);
   const [editing, setEditing] = useState(false);
 
   const handleClick = () => {setEditing(true)};
 
   if(editing){
-    return <Editor blueprint={blueprint} setBlueprint={setBlueprint} setEditing={setEditing} username={userInfo.user.username}/>};
+    return <Editor boardInfo={boardInfo} setBoardInfo={setBoardInfo} setEditing={setEditing} username={userInfo.user.username}/>};
 
   return(
     <div id="board">
       <button onClick={handleClick}>Edit</button>
-      {CreateElements(blueprint)}
+      {CreateElements(boardInfo.blueprint)}
     </div>
   )
 }

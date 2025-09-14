@@ -3,9 +3,10 @@ import Draggable from 'react-draggable';
 import Popup from 'reactjs-popup';
 import '../style/style.css';
 
-export function Editor({ blueprint, setBlueprint, setEditing, username}){
+export function Editor({ boardInfo, setBoardInfo, setEditing, username}){
   // const [blueprint, setBlueprint] = useState(persistentBP);
-  const [idNum, setIdNum] = useState(blueprint.length);
+  const [blueprint, setBlueprint] = useState(boardInfo.blueprint)
+  const [idNum, setIdNum] = useState(boardInfo.lastid + 1);
   const [textIn, setTextIn] = useState("");
   const [imgIn, setImgIn] = useState("");
 
@@ -55,6 +56,10 @@ export function Editor({ blueprint, setBlueprint, setEditing, username}){
   };
 
   const SaveState = async () => {
+    var tempBoard = boardInfo;
+    tempBoard.blueprint = blueprint;
+    setBoardInfo(tempBoard);
+
     const result = await apiUpdate();
     if(result.success){setEditing(false);}
     else{alert(result.message);}
@@ -65,7 +70,7 @@ export function Editor({ blueprint, setBlueprint, setEditing, username}){
     try{
       return await fetch('/blueprint/', {
         method: 'POST',
-        headers: {'Content-type' : 'application/json', 'username': username},
+        headers: {'Content-type' : 'application/json', 'username': username, 'lastid': idNum-1},
         body: JSON.stringify({blueprint})
       })
       .then((response) => response.json())
