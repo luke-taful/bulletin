@@ -83,6 +83,7 @@ export function Editor({ boardInfo, setBoardInfo, setEditing, username}){
 
   //Delete specific element by button press
   const handleDelete = (event) => {
+    console.log(event.target.id);
     setBlueprint(blueprint.filter(item => item.id !== Number(event.target.id)));
   }
 
@@ -90,11 +91,12 @@ export function Editor({ boardInfo, setBoardInfo, setEditing, username}){
   const handleStop = (event, dragElement) => {
     dragElement.xpos = dragElement.x;
     dragElement.ypos = dragElement.y;
+    //Updating BP on the fly
     var updateBP = blueprint;
-    //its searching by position, not by the true id
-    console.log(updateBP[event.target.id]);
-    updateBP[event.target.id].xpos = dragElement.xpos;
-    updateBP[event.target.id].ypos = dragElement.ypos;
+    console.log(event.target.id);
+    const targetElement = updateBP.find(item => item.id === Number(event.target.id));
+    targetElement.xpos = dragElement.xpos;
+    targetElement.ypos = dragElement.ypos;
     setBlueprint(updateBP);
   };
 
@@ -124,7 +126,7 @@ export function Editor({ boardInfo, setBoardInfo, setEditing, username}){
       scale={1}
       onStop={handleStop}
       defaultPosition={{ x: items.xpos, y: items.ypos }}>
-      <div ref={nodeRef} style={{width:"fit-content", height:"fit-content", cursor:"crosshair"}}>
+      <div id={items.id} ref={nodeRef} style={{width:"fit-content", height:"fit-content", cursor:"crosshair"}}>
         <p id={items.id} className="userElement" style={{color: items.color, fontFamily: items.font, fontSize: items.textSize}}> {items.text} </p>
         
         {/* If delete is toggled, render the delete button */}
