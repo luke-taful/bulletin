@@ -9,6 +9,7 @@ export function Editor({ boardInfo, setBoardInfo, setEditing, username}){
   const [idNum, setIdNum] = useState(boardInfo.lastid + 1);
   const [textIn, setTextIn] = useState("");
   const [imgIn, setImgIn] = useState("");
+  const [deleting, setDeleting] = useState(false);
 
   //Manage adding new Elements
   const addText = () => {
@@ -90,8 +91,10 @@ export function Editor({ boardInfo, setBoardInfo, setEditing, username}){
     dragElement.xpos = dragElement.x;
     dragElement.ypos = dragElement.y;
     var updateBP = blueprint;
-    updateBP[(event.target.id)].xpos = dragElement.xpos;
-    updateBP[(event.target.id)].ypos = dragElement.ypos;
+    //its searching by position, not by the true id
+    console.log(updateBP[event.target.id]);
+    updateBP[event.target.id].xpos = dragElement.xpos;
+    updateBP[event.target.id].ypos = dragElement.ypos;
     setBlueprint(updateBP);
   };
 
@@ -115,6 +118,7 @@ export function Editor({ boardInfo, setBoardInfo, setEditing, username}){
     return(
     <Draggable
       handle=".userElement"
+      disabled={deleting}
       nodeRef={nodeRef}
       grid={[25, 25]}
       scale={1}
@@ -122,7 +126,11 @@ export function Editor({ boardInfo, setBoardInfo, setEditing, username}){
       defaultPosition={{ x: items.xpos, y: items.ypos }}>
       <div ref={nodeRef} style={{width:"fit-content", height:"fit-content", cursor:"crosshair"}}>
         <p id={items.id} className="userElement" style={{color: items.color, fontFamily: items.font, fontSize: items.textSize}}> {items.text} </p>
+        
+        {/* If delete is toggled, render the delete button */}
+        {deleting && (
         <button id={items.id} className="deleteButton" onClick={handleDelete}>X</button>
+        )}
       </div>
     </Draggable>
   )}
@@ -132,6 +140,7 @@ export function Editor({ boardInfo, setBoardInfo, setEditing, username}){
     return(
     <Draggable
       handle=".userElement"
+      disabled={deleting}
       nodeRef={nodeRef}
       grid={[25, 25]}
       scale={1}
@@ -139,11 +148,30 @@ export function Editor({ boardInfo, setBoardInfo, setEditing, username}){
       defaultPosition={{ x: items.xpos, y: items.ypos }}>
       <div ref={nodeRef} style={{width:"fit-content", height:"fit-content", cursor:"crosshair"}}>
         <img id={items.id} className="userElement" src={items.src} alt={items.text} width={items.size} height={items.size} draggable="false"></img>
-        <button className="deleteButton" onClick={handleDelete}>X</button>
+        
+        {/* If delete is toggled, render delete button */}
+        {deleting && (
+        <button id={items.id} className="deleteButton" onClick={handleDelete}>X</button>
+        )}
       </div>
     </Draggable>
   )}
 
+  const handleDeleteClick = () => {setDeleting(!deleting)};
+
+  if(deleting){
+    return(
+      <div id="board">
+        <div>
+          <button onClick={handleDeleteClick}>Done</button>
+        </div>
+        {/* Creating the custom elements */}
+        {CreateElements(blueprint)}
+      </div>
+    );
+  };
+
+  //Actual Board Return
   return(
     <div id="board">
       <div>
@@ -160,6 +188,7 @@ export function Editor({ boardInfo, setBoardInfo, setEditing, username}){
             <input type="file" id="imgIn" name="imgIn" accept="image/png, image/jpeg" onChange={(e) => {setImgIn(e.target.files[0])}}/> 
             <button id="atButton" onClick={AddImage}>Enter</button>
           </Popup>
+          <button onClick={handleDeleteClick}>Delete</button>
       </div>
       {/* Creating the custom elements */}
       {CreateElements(blueprint)}
