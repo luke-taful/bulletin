@@ -5,12 +5,13 @@ import '../style/style.css';
 
 export function Editor({ boardInfo, setBoardInfo, setEditing, username}){
   // const [blueprint, setBlueprint] = useState(persistentBP);
-  const [blueprint, setBlueprint] = useState(boardInfo.blueprint)
+  const [blueprint, setBlueprint] = useState(boardInfo.blueprint);
   const [idNum, setIdNum] = useState(boardInfo.lastid + 1);
   const [textIn, setTextIn] = useState("");
   const [imgIn, setImgIn] = useState("");
   const [deleting, setDeleting] = useState(false);
-  const [imgDeleteList, stageImg] = useState ([]);
+  const [imgDeleteList, stageDelete] = useState ([]);
+  const [imgAddList, stageAdd] = useState ([]);
 
   //Manage adding new Elements
   const addText = () => {
@@ -29,13 +30,16 @@ export function Editor({ boardInfo, setBoardInfo, setEditing, username}){
 
   const AddImage = async () => {
     const imgName = username + "$" + Date.now() + ".jpeg";
-    //Send image to backend
-    await ImagePost(imgName);
+    //Stage image to be saved to backend
+    const tempArray = imgAddList;
+    tempArray.push([imgName, imgIn]);
+    stageAdd(tempArray);
+
     //Update blueprint with new url
     setBlueprint([ ...blueprint,{
       id:idNum,
       type:"img",
-      src:"http://localhost:5000/uploads/" + imgName,
+      src:URL.createObjectURL(imgIn),
       name:imgName,
       text:"Image Unavailable",
       xpos:500,
@@ -44,12 +48,14 @@ export function Editor({ boardInfo, setBoardInfo, setEditing, username}){
     setIdNum(idNum + 1);
   }
 
-  const ImagePost = async (imgName) => {
+
+
+  const ImagePost = async (imgName, image) => {
     try{
       response = await fetch('/images/', {
         method: 'POST',
         headers: {'Content-type' : 'image/jpeg', 'imgname': imgName},
-        body: imgIn
+        body: image
       })
       .then((response) => response.json())
       .then((result) => {
@@ -58,21 +64,42 @@ export function Editor({ boardInfo, setBoardInfo, setEditing, username}){
     }catch(error){return {success: false, message: "Image upload error"}};
   };
 
+
+
   const SaveState = async () => {
+
+    //Update image sources to point to server endpoint
+    for(var i = 0; i < blueprint.length; i++){
+      if(blueprint[i].type == "img"){
+        blueprint[i].src = "http://localhost:5000/uploads/" + blueprint[i].name;
+      }
+    }
+    //Update board info
     var tempBoard = boardInfo;
     tempBoard.blueprint = blueprint;
     setBoardInfo(tempBoard);
 
+
+    //Send board update request to server
     const result = await apiUpdate();
     if(result.success){
+      //Delete requested images
       if(imgDeleteList.length != 0){
         const imgResult = await imgDelete();
         if (!imgResult.success){alert(imgResult.message)};
       }
+      //Save requested images
+      for(var i = 0; i < imgAddList.length; i++){
+        await ImagePost(imgAddList[i][0], imgAddList[i][1]);
+      }
+
       setEditing(false);
     }
     else{alert(result.message)};
   };
+
+
+
 
   //Sending list of images that should be deleted from server storage
   async function imgDelete(){
@@ -109,9 +136,17 @@ export function Editor({ boardInfo, setBoardInfo, setEditing, username}){
     const target = blueprint.filter(item => item.id === Number(event.target.id))[0];
     //Stage Images to be deleted once the board is saved
     if(target.type == "img"){
-      const tempArray = imgDeleteList;
-      tempArray.push(target.name);
-      stageImg(tempArray);
+      var inAddList = false;
+      for(var i = 0; i < imgAddList.length; i++){
+        if (imgAddList[i][0] == target.name){
+          inAddList = true;
+        }
+      }
+      if(!inAddList){
+        const tempArray = imgDeleteList;
+        tempArray.push(target.name);
+        stageDelete(tempArray);
+      }
     }
     //Remove from working blueprint
     setBlueprint(blueprint.filter(item => item.id !== Number(event.target.id)));
