@@ -10,18 +10,19 @@ export function Editor({ boardInfo, setBoardInfo, setEditing, username}){
   const [textIn, setTextIn] = useState("");
   const [imgIn, setImgIn] = useState("");
   const [deleting, setDeleting] = useState(false);
+  const [imgDeleteList, stageImg] = useState ([]);
 
   //Manage adding new Elements
   const addText = () => {
     setBlueprint([ ...blueprint,{
-        id:idNum,
-       type:"text",
-        text: textIn, 
-        color:"black",
-        font:"Arial, Helvetica, sans-serif",
-        textSize:"smaller",
-        xpos:500,
-        ypos:0
+      id:idNum,
+      type:"text",
+      text: textIn, 
+      color:"black",
+      font:"Arial, Helvetica, sans-serif",
+      textSize:"smaller",
+      xpos:500,
+      ypos:0
     }]);
     setIdNum(idNum + 1);
   }
@@ -35,6 +36,7 @@ export function Editor({ boardInfo, setBoardInfo, setEditing, username}){
       id:idNum,
       type:"img",
       src:"http://localhost:5000/uploads/" + imgName,
+      name:imgName,
       text:"Image Unavailable",
       xpos:500,
       ypos:0
@@ -62,9 +64,30 @@ export function Editor({ boardInfo, setBoardInfo, setEditing, username}){
     setBoardInfo(tempBoard);
 
     const result = await apiUpdate();
-    if(result.success){setEditing(false);}
-    else{alert(result.message);}
+    if(result.success){
+      if(imgDeleteList.length != 0){
+        const imgResult = await imgDelete();
+        if (!imgResult.success){alert(imgResult.message)};
+      }
+      setEditing(false);
+    }
+    else{alert(result.message)};
   };
+
+  //Sending list of images that should be deleted from server storage
+  async function imgDelete(){
+    try{
+      return await fetch('/deleteImage/', {
+        method: 'POST',
+        headers: {'Content-type' : 'application/json'},
+        body: JSON.stringify({imgList: imgDeleteList})
+      })
+      .then((response) => response.json())
+      .then((result) => {
+        return(result);
+      });
+    }catch(error){return {success:false, message:"Server Error"}};
+  }
 
   //Preserving blueprint
   async function apiUpdate(){
@@ -83,7 +106,14 @@ export function Editor({ boardInfo, setBoardInfo, setEditing, username}){
 
   //Delete specific element by button press
   const handleDelete = (event) => {
-    console.log(event.target.id);
+    const target = blueprint.filter(item => item.id === Number(event.target.id))[0];
+    //Stage Images to be deleted once the board is saved
+    if(target.type == "img"){
+      const tempArray = imgDeleteList;
+      tempArray.push(target.name);
+      stageImg(tempArray);
+    }
+    //Remove from working blueprint
     setBlueprint(blueprint.filter(item => item.id !== Number(event.target.id)));
   }
 
@@ -93,7 +123,6 @@ export function Editor({ boardInfo, setBoardInfo, setEditing, username}){
     dragElement.ypos = dragElement.y;
     //Updating BP on the fly
     var updateBP = blueprint;
-    console.log(event.target.id);
     const targetElement = updateBP.find(item => item.id === Number(event.target.id));
     targetElement.xpos = dragElement.xpos;
     targetElement.ypos = dragElement.ypos;

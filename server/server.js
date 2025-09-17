@@ -54,9 +54,24 @@ app.post('/images',
     }catch(error){return res.json({ success: false, message: "There was an error saving image"})}
 });
 
+app.post('/deleteImage', (req, res) => {
+  const imgNames = req.body.imgList;
+  console.log(req.body);
+  for(var i = 0; i < imgNames.length; i++){
+    const filePath = path.join(__dirname, "uploads", `${imgNames[i]}`);
+    console.log(filePath);
+    fs.unlinkSync(filePath, error =>{
+      if(error){
+        return res.json({ success: false, message: "There was an error deleting image"})
+      };
+    });
+  };
+  return res.json({ success: true, message: "Images deleted"})
+});
+
 //Adding new user
 app.post('/register', (req, res) =>{
-  const newUserReq = (req.body.userData);
+  const newUserReq = req.body.userData;
   const filePath = path.join(__dirname, "users", `${newUserReq.username}.json`);
 
   //Check if user exists already

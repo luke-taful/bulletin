@@ -17,6 +17,10 @@ const nextConfig = {
       {
         source: '/images',
         destination: 'http://localhost:5000/images'
+      },
+      {
+        source: '/deleteImage',
+        destination: 'http://localhost:5000/deleteImage'
       }
     ]
   }
