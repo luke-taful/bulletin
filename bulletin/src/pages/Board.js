@@ -16,11 +16,10 @@ export default function Board({userInfo}){
   //Applying custom background style
   const background = boardInfo.background;
   const backgroundCSS = {    
-    background: "linear-gradient(to bottom, red , transparent )"
-    // backgroundColor: background.colorPrimary
+    zIndex: "1",
+    background: `linear-gradient(to ${background.direction}, ${background.colorPrimary} , ${background.colorSecondary} )`
   };
 
-  console.log(background);
   return(
     <div id="board" style={backgroundCSS}>
       <button onClick={handleClick}>Edit</button>

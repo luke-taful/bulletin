@@ -223,11 +223,20 @@ export function Editor({ boardInfo, setBoardInfo, setEditing, username}){
     </Draggable>
   )}
 
+  //Toggle delete alt page
   const handleDeleteClick = () => {setDeleting(!deleting)};
+
+  //Applying custom background style
+  const background = boardInfo.background;
+  const backgroundCSS = {    
+    background: `linear-gradient(to ${background.direction}, ${background.colorPrimary} , ${background.colorSecondary} )`
+  };
+
+  //Return Options ------------------------------------------------
 
   if(deleting){
     return(
-      <div id="board">
+      <div id="board" style={backgroundCSS}>
         <div>
           <button onClick={handleDeleteClick}>Done</button>
         </div>
@@ -239,7 +248,7 @@ export function Editor({ boardInfo, setBoardInfo, setEditing, username}){
 
   //Actual Board Return
   return(
-    <div id="board">
+    <div id="board" style={backgroundCSS}>
       <div>
         {/* Adding buttons for customization options */}
           <button onClick={SaveState}>Save</button>

@@ -21,7 +21,7 @@ export default function RootLayout({ children }){
     return(
       <html lang="en">
         <body className={`${geistSans.variable} ${geistMono.variable}`} style={{height:"61px"}}>
-            <ul style={{zIndex:"1"}}>
+            <ul style={{zIndex:"0.6"}}>
                 <li className="barElement"><Link href="/Board">Home</Link></li>
                 <li className="barElement"><Link href="/">Editor</Link></li>
                 <li className="barElement"><Link href="/">Browse</Link></li>

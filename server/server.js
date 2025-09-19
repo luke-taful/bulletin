@@ -86,9 +86,10 @@ app.post('/register', (req, res) =>{
     "boardinfo": {
       "lastid": 1,
       "background": {
-        "colorPrimary": "DEDEDE",
-        "colorSecondary": "171717",
-        "pattern": "gradient"
+        "colorPrimary": "#DEDEDE",
+        "colorSecondary": "#bcbcbcff",
+        "pattern": "gradient",
+        "direction": "top"
       },
       "blueprint": [
         {"id":0,"type":"text","text":"No existing board found","color":"green","font":"impact","textSize":"xxx-large","xpos":350,"ypos":510}, 
