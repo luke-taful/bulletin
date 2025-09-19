@@ -13,8 +13,16 @@ export default function Board({userInfo}){
   if(editing){
     return <Editor boardInfo={boardInfo} setBoardInfo={setBoardInfo} setEditing={setEditing} username={userInfo.user.username}/>};
 
+  //Applying custom background style
+  const background = boardInfo.background;
+  const backgroundCSS = {    
+    background: "linear-gradient(to bottom, red , transparent )"
+    // backgroundColor: background.colorPrimary
+  };
+
+  console.log(background);
   return(
-    <div id="board">
+    <div id="board" style={backgroundCSS}>
       <button onClick={handleClick}>Edit</button>
       {CreateElements(boardInfo.blueprint)}
     </div>
