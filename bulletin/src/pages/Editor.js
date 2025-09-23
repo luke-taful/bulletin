@@ -2,6 +2,7 @@ import React, {useState, useRef} from 'react';
 import Draggable from 'react-draggable';
 import Popup from 'reactjs-popup';
 import '../style/style.css';
+import { HexColorPicker } from 'react-colorful';
 
 export function Editor({ boardInfo, setBoardInfo, setEditing, username}){
   // const [blueprint, setBlueprint] = useState(persistentBP);
@@ -10,8 +11,12 @@ export function Editor({ boardInfo, setBoardInfo, setEditing, username}){
   const [textIn, setTextIn] = useState("");
   const [imgIn, setImgIn] = useState("");
   const [deleting, setDeleting] = useState(false);
-  const [imgDeleteList, stageDelete] = useState ([]);
-  const [imgAddList, stageAdd] = useState ([]);
+  const [imgDeleteList, stageDelete] = useState([]);
+  const [imgAddList, stageAdd] = useState([]);
+
+  const [background, setBackground] = useState(boardInfo.background);
+  const [selectedPrimary, setSelectedPrimary] = useState(background.colorPrimary);
+  const [selectedSecondary, setSelectedSecondary] = useState(background.colorSecondary);
 
   //Manage adding new Elements
   const addText = () => {
@@ -48,26 +53,7 @@ export function Editor({ boardInfo, setBoardInfo, setEditing, username}){
     setIdNum(idNum + 1);
   }
 
-
-
-  const ImagePost = async (imgName, image) => {
-    try{
-      response = await fetch('/images/', {
-        method: 'POST',
-        headers: {'Content-type' : 'image/jpeg', 'imgname': imgName},
-        body: image
-      })
-      .then((response) => response.json())
-      .then((result) => {
-        return(result);
-      });
-    }catch(error){return {success: false, message: "Image upload error"}};
-  };
-
-
-
   const SaveState = async () => {
-
     //Update image sources to point to server endpoint
     for(var i = 0; i < blueprint.length; i++){
       if(blueprint[i].type == "img"){
@@ -78,8 +64,6 @@ export function Editor({ boardInfo, setBoardInfo, setEditing, username}){
     var tempBoard = boardInfo;
     tempBoard.blueprint = blueprint;
     setBoardInfo(tempBoard);
-
-
     //Send board update request to server
     const result = await apiUpdate();
     if(result.success){
@@ -92,29 +76,10 @@ export function Editor({ boardInfo, setBoardInfo, setEditing, username}){
       for(var i = 0; i < imgAddList.length; i++){
         await ImagePost(imgAddList[i][0], imgAddList[i][1]);
       }
-
       setEditing(false);
     }
     else{alert(result.message)};
   };
-
-
-
-
-  //Sending list of images that should be deleted from server storage
-  async function imgDelete(){
-    try{
-      return await fetch('/deleteImage/', {
-        method: 'POST',
-        headers: {'Content-type' : 'application/json'},
-        body: JSON.stringify({imgList: imgDeleteList})
-      })
-      .then((response) => response.json())
-      .then((result) => {
-        return(result);
-      });
-    }catch(error){return {success:false, message:"Server Error"}};
-  }
 
   //Preserving blueprint
   async function apiUpdate(){
@@ -130,6 +95,35 @@ export function Editor({ boardInfo, setBoardInfo, setEditing, username}){
       });
     }catch(error){return {success: false, message: "Server Error"}};
   };
+
+  const ImagePost = async (imgName, image) => {
+    try{
+      response = await fetch('/images/', {
+        method: 'POST',
+        headers: {'Content-type' : 'image/jpeg', 'imgname': imgName},
+        body: image
+      })
+      .then((response) => response.json())
+      .then((result) => {
+        return(result);
+      });
+    }catch(error){return {success: false, message: "Image upload error"}};
+  };
+
+  //Sending list of images that should be deleted from server storage
+  async function imgDelete(){
+    try{
+      return await fetch('/deleteImage/', {
+        method: 'POST',
+        headers: {'Content-type' : 'application/json'},
+        body: JSON.stringify({imgList: imgDeleteList})
+      })
+      .then((response) => response.json())
+      .then((result) => {
+        return(result);
+      });
+    }catch(error){return {success:false, message:"Server Error"}};
+  }
 
   //Delete specific element by button press
   const handleDelete = (event) => {
@@ -152,18 +146,8 @@ export function Editor({ boardInfo, setBoardInfo, setEditing, username}){
     setBlueprint(blueprint.filter(item => item.id !== Number(event.target.id)));
   }
 
-  //Draggable Position Handling
-  const handleStop = (event, dragElement) => {
-    dragElement.xpos = dragElement.x;
-    dragElement.ypos = dragElement.y;
-    //Updating BP on the fly
-    var updateBP = blueprint;
-    const targetElement = updateBP.find(item => item.id === Number(event.target.id));
-    targetElement.xpos = dragElement.xpos;
-    targetElement.ypos = dragElement.ypos;
-    setBlueprint(updateBP);
-  };
 
+  //Element Loading ---------------------------------------------------------------
   function CreateElements(items){
     //Create each custom element from the json blueprint and store in a list.
     const elements = items.map((item) => {
@@ -223,20 +207,49 @@ export function Editor({ boardInfo, setBoardInfo, setEditing, username}){
     </Draggable>
   )}
 
+
+  //Update Handling ------------------------------------------------------
+  //Draggable Position Handling
+  const handleStop = (event, dragElement) => {
+    dragElement.xpos = dragElement.x;
+    dragElement.ypos = dragElement.y;
+    //Updating BP on the fly
+    var updateBP = blueprint;
+    const targetElement = updateBP.find(item => item.id === Number(event.target.id));
+    targetElement.xpos = dragElement.xpos;
+    targetElement.ypos = dragElement.ypos;
+    setBlueprint(updateBP);
+  };
+
   //Toggle delete alt page
   const handleDeleteClick = () => {setDeleting(!deleting)};
 
-  //Applying custom background style
-  const background = boardInfo.background;
-  const backgroundCSS = {    
-    background: `linear-gradient(to ${background.direction}, ${background.colorPrimary} , ${background.colorSecondary} )`
+  //Background customization
+  const backgroundUpdate = (event) => {
+    background.colorPrimary = selectedPrimary;
+    background.colorSecondary = selectedSecondary;    
+    background.pattern = event.target.value;
+    if(background.pattern == "none"){
+      background.colorSecondary = background.colorPrimary;
+      background.pattern = "left";
+    }
+    setIdNum(idNum+1);
+    console.log(background);
   };
 
-  //Return Options ------------------------------------------------
+  const handleColorChange = () => {
+    background.colorPrimary = selectedPrimary;
+    background.colorSecondary = selectedSecondary;
+    setIdNum(idNum+1);
+  };
 
+  const backgroundCSS={background: `linear-gradient(to ${background.pattern}, ${background.colorPrimary} , ${background.colorSecondary} )`}
+
+
+  //Return Options ------------------------------------------------
   if(deleting){
     return(
-      <div id="board" style={backgroundCSS}>
+      <div id="board" style={backgroundCSS} key={idNum}>
         <div>
           <button onClick={handleDeleteClick}>Done</button>
         </div>
@@ -248,7 +261,7 @@ export function Editor({ boardInfo, setBoardInfo, setEditing, username}){
 
   //Actual Board Return
   return(
-    <div id="board" style={backgroundCSS}>
+    <div id="board" style={backgroundCSS} key={idNum}>
       <div>
         {/* Adding buttons for customization options */}
           <button onClick={SaveState}>Save</button>
@@ -262,6 +275,24 @@ export function Editor({ boardInfo, setBoardInfo, setEditing, username}){
           <Popup trigger={<button>Add File</button>} position="left center"> 
             <input type="file" id="imgIn" name="imgIn" accept="image/png, image/jpeg" onChange={(e) => {setImgIn(e.target.files[0])}}/> 
             <button id="atButton" onClick={AddImage}>Enter</button>
+          </Popup>
+
+
+          {/* Background options */}
+          <Popup trigger={<button>Background</button>} position="left top"> 
+            <h4>Customize Background:</h4> <br/>
+            <HexColorPicker color={background.colorPrimary} onChange={setSelectedPrimary}/>
+            <HexColorPicker color={background.colorSecondary} onChange={setSelectedSecondary}/>
+            <button className='colorConfirm' onClick={handleColorChange}>OK</button>
+
+            <br/> <label>Gradient:</label> <br/>
+            <input type='radio'id='none' value="none" name='backgroundType' onChange={backgroundUpdate}/><label htmlFor="none">Solid Colour</label>
+            <br/>
+            <input type='radio'id='up' value="top" name='backgroundType' onChange={backgroundUpdate}/><label htmlFor="up">Up</label>
+            <input type='radio'id='down' value="bottom" name='backgroundType' onChange={backgroundUpdate}/><label htmlFor="down">Down</label>
+            <input type='radio'id='left' value="left" name='backgroundType' onChange={backgroundUpdate}/><label htmlFor="left">Left</label>
+            <input type='radio'id='right' value="right" name='backgroundType' onChange={backgroundUpdate}/><label htmlFor="right">Right</label>
+
           </Popup>
           <button onClick={handleDeleteClick}>Delete</button>
       </div>
