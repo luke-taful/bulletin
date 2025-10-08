@@ -5,7 +5,6 @@ import '../style/style.css';
 import { HexColorPicker } from 'react-colorful';
 
 export function Editor({ boardInfo, setBoardInfo, setEditing, username}){
-  // const [blueprint, setBlueprint] = useState(persistentBP);
   const [blueprint, setBlueprint] = useState(boardInfo.blueprint);
   const [idNum, setIdNum] = useState(boardInfo.lastid + 1);
   const [textIn, setTextIn] = useState("");
@@ -63,6 +62,8 @@ export function Editor({ boardInfo, setBoardInfo, setEditing, username}){
     //Update board info
     var tempBoard = boardInfo;
     tempBoard.blueprint = blueprint;
+    tempBoard.background = background;
+    tempBoard.lastid = idNum;
     setBoardInfo(tempBoard);
     //Send board update request to server
     const result = await apiUpdate();
@@ -86,8 +87,8 @@ export function Editor({ boardInfo, setBoardInfo, setEditing, username}){
     try{
       return await fetch('/blueprint/', {
         method: 'POST',
-        headers: {'Content-type' : 'application/json', 'username': username, 'lastid': idNum-1},
-        body: JSON.stringify({blueprint})
+        headers: {'Content-type' : 'application/json', 'username': username},
+        body: JSON.stringify({boardInfo})
       })
       .then((response) => response.json())
       .then((result) => {

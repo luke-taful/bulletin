@@ -15,17 +15,15 @@ const port = 5000;
 
 //Blueprint update
 app.post('/blueprint', (req, res) => {
-  const blueprint = (req.body.blueprint);
+  const boardInfo = (req.body.boardInfo);
   const user = (req.headers.username);
-  const lastid = (req.headers.lastid);
   const filePath = path.join(__dirname, "users", `${user}.json`);
   if (!fs.existsSync(filePath)){return res.json({ success: false, message: "There was an error retrieving user info"})};
 
   //Read existing user file
   try {
     const currentData = JSON.parse(fs.readFileSync(filePath, "utf-8"));
-    currentData.boardinfo.blueprint = blueprint;
-    currentData.boardinfo.lastid = Number(lastid);
+    currentData.boardinfo = boardInfo;
     //Write modified object data to user file
     const newBP = JSON.stringify(currentData, null, 2);
     fs.writeFile(filePath, newBP, (err) => {
@@ -41,10 +39,8 @@ app.post('/images',
   bodyParser.raw({ type: ["image/jpeg", "image/png"], limit: "5mb" }),
   (req, res) => {
     const imgName = req.headers.imgname;
-    console.log(imgName);
     const filePath = path.join(__dirname, "uploads", imgName); 
     try{
-      console.log(req.body);
       fs.writeFile(filePath, req.body, (error) => {
         if (error) {
           return res.json({ success: false, message: "There was an error saving image"})
@@ -56,10 +52,8 @@ app.post('/images',
 
 app.post('/deleteImage', (req, res) => {
   const imgNames = req.body.imgList;
-  console.log(req.body);
   for(var i = 0; i < imgNames.length; i++){
     const filePath = path.join(__dirname, "uploads", `${imgNames[i]}`);
-    console.log(filePath);
     fs.unlinkSync(filePath, error =>{
       if(error){
         return res.json({ success: false, message: "There was an error deleting image"})
