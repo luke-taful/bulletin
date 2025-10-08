@@ -15,7 +15,7 @@ export default function Board({userInfo}){
 
   //Applying custom background style
   const background = boardInfo.background;
-  const backgroundCSS={background: `linear-gradient(to ${background.pattern}, ${background.colorPrimary} , ${background.colorSecondary} )`}
+  const backgroundCSS={background: `linear-gradient(to ${background.pattern}, ${background.colorPrimary} , ${background.colorSecondary} )`, zIndex: "0.5"}
 
   return(
     <div id="board" style={backgroundCSS}>
