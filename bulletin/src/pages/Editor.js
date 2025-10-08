@@ -225,22 +225,17 @@ export function Editor({ boardInfo, setBoardInfo, setEditing, username}){
   const handleDeleteClick = () => {setDeleting(!deleting)};
 
   //Background customization
-  const backgroundUpdate = (event) => {
+  const backgroundUpdate = () => {
+    const selectedPattern = document.querySelector('input[name="backgroundType"]:checked').value;
     background.colorPrimary = selectedPrimary;
     background.colorSecondary = selectedSecondary;    
-    background.pattern = event.target.value;
+    background.pattern = selectedPattern;
     if(background.pattern == "none"){
       background.colorSecondary = background.colorPrimary;
       background.pattern = "left";
     }
     setIdNum(idNum+1);
     console.log(background);
-  };
-
-  const handleColorChange = () => {
-    background.colorPrimary = selectedPrimary;
-    background.colorSecondary = selectedSecondary;
-    setIdNum(idNum+1);
   };
 
   const backgroundCSS={background: `linear-gradient(to ${background.pattern}, ${background.colorPrimary} , ${background.colorSecondary} )`}
@@ -283,15 +278,16 @@ export function Editor({ boardInfo, setBoardInfo, setEditing, username}){
             <h4>Customize Background:</h4> <br/>
             <HexColorPicker color={background.colorPrimary} onChange={setSelectedPrimary}/>
             <HexColorPicker color={background.colorSecondary} onChange={setSelectedSecondary}/>
-            <button className='colorConfirm' onClick={handleColorChange}>OK</button>
 
             <br/> <label>Gradient:</label> <br/>
-            <input type='radio'id='none' value="none" name='backgroundType' onChange={backgroundUpdate}/><label htmlFor="none">Solid Colour</label>
+            <input type='radio'id='none' value="none" name='backgroundType' defaultChecked="checked"/><label htmlFor="none">Solid Colour</label>
             <br/>
-            <input type='radio'id='up' value="top" name='backgroundType' onChange={backgroundUpdate}/><label htmlFor="up">Up</label>
-            <input type='radio'id='down' value="bottom" name='backgroundType' onChange={backgroundUpdate}/><label htmlFor="down">Down</label>
-            <input type='radio'id='left' value="left" name='backgroundType' onChange={backgroundUpdate}/><label htmlFor="left">Left</label>
-            <input type='radio'id='right' value="right" name='backgroundType' onChange={backgroundUpdate}/><label htmlFor="right">Right</label>
+            <input type='radio'id='up' value="top" name='backgroundType' /><label htmlFor="up">Up</label>
+            <input type='radio'id='down' value="bottom" name='backgroundType' /><label htmlFor="down">Down</label>
+            <input type='radio'id='left' value="left" name='backgroundType' /><label htmlFor="left">Left</label>
+            <input type='radio'id='right' value="right" name='backgroundType' /><label htmlFor="right">Right</label>
+
+            <button className='backgroundConfirm' onClick={backgroundUpdate}>OK</button>
 
           </Popup>
           <button onClick={handleDeleteClick}>Delete</button>
