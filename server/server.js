@@ -78,6 +78,7 @@ app.post('/register', (req, res) =>{
       "password":newUserReq.password
     },
     "boardinfo": {
+      "owner":newUserReq.username,
       "lastid": 1,
       "background": {
         "colorPrimary": "#de1111ff",
@@ -85,8 +86,8 @@ app.post('/register', (req, res) =>{
         "pattern": "bottom"
       },
       "blueprint": [
-        {"id":0,"type":"text","text":"No existing board found","color":"green","font":"impact","textSize":"xxx-large","xpos":350,"ypos":510}, 
-        {"id":1,"type":"text","text":"Click the edit button to get started!","color":"green","font":"impact","textSize":"xxx-large","xpos":350,"ypos":450}
+        {"id":0,"type":"text","text":"No existing board found","owner":newUserReq.username,"color":"green","font":"impact","textSize":"xxx-large","xpos":350,"ypos":510}, 
+        {"id":1,"type":"text","text":"Click the edit button to get started!","owner":newUserReq.username,"color":"green","font":"impact","textSize":"xxx-large","xpos":350,"ypos":450}
       ]
     }
   };
